@@ -5,6 +5,8 @@ namespace CpuAndGpuMetrics
 {
     static public class CpuMetricRetriever
     {
+        static readonly int TIME = 2000;
+
         /// <summary>
         /// Gets the current CPU usage and prints it to the console.
         /// </summary>
@@ -19,7 +21,7 @@ namespace CpuAndGpuMetrics
             try
             {
                 cpuCounter = new("Processor", "% Processor Time", "_Total");
-                cpuUsage = GetReading(cpuCounter, 2000);
+                cpuUsage = GetReading(cpuCounter, TIME);
                 Console.WriteLine($"Current CPU Usage (%) = {cpuUsage}%");
             }
             catch (Exception ex)

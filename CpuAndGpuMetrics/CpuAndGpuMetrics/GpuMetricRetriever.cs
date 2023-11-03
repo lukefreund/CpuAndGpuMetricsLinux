@@ -1,10 +1,14 @@
 ﻿using System.Diagnostics;
+using System.Reflection.Metadata;
 using static CpuAndGpuMetrics.CounterReader;
 
 namespace CpuAndGpuMetrics
 {
     static public class GpuMetricRetriever
     {
+        static readonly int TIME = 25;
+
+
         /// <summary>
         /// Prints GPU usage metrics.
         /// </summary>
@@ -12,7 +16,7 @@ namespace CpuAndGpuMetrics
         /// An array containing, in this order, the total utilization, 3D utilization, Copy utilization, and 
         /// Decode Utilization. If an error occurs, and empty array is returned.
         /// </returns>
-        public static float[] GetGPUUsage()
+        public static float[] GetGpuUsage()
         {
             try
             {
@@ -38,7 +42,7 @@ namespace CpuAndGpuMetrics
                     string instance = instanceNames[i];
                     PerformanceCounter counter = new("GPU Engine", "Utilization Percentage", instance);
 
-                    float value = GetReading(counter, 50);
+                    float value = GetReading(counter, TIME);
 
                     totalValues[i] = value;
 
