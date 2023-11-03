@@ -64,6 +64,7 @@ namespace CpuAndGpuMetrics
 
                 // Calculate the sum of different metrics
                 float d3Utilization = d3Values.Sum();
+                // Khang: Perhaps write a function to place the decode values towards the end of the return array
                 float decodeUtilization = decodeValues.Sum() / 3;
                 float copyUtilization = copyValues.Sum();
                 float totalUtilization = new[] { d3Utilization, decodeUtilization, copyUtilization }.Max();

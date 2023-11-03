@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "gZOyx6ORddzUfcpr9aT/zcBSyKcZwRc3h63JGh0ZkI8Mq8VZl4aAbPVrYIQBbkVxMAX3FxXfufijJQvO9pt6XA==",
+  "dgSpecHash": "0Iaai+lx12z3HMPytvdlJV2gyiJh9vh2pn/dVFA0RaqQk7q6hQz+Gch0+Bm4OyIrKSfn9i+5UnnxV1P8D5ACWQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\tester\\source\\repos\\CpuAndGpuMetrics\\CpuAndGpuMetrics\\CpuAndGpuMetrics.csproj",
+  "projectFilePath": "C:\\Users\\tester\\Desktop\\CpuAndGpuMetrics\\CpuAndGpuMetrics\\CpuAndGpuMetrics\\CpuAndGpuMetrics.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\tester\\.nuget\\packages\\microsoft.win32.systemevents\\7.0.0\\microsoft.win32.systemevents.7.0.0.nupkg.sha512",
     "C:\\Users\\tester\\.nuget\\packages\\system.configuration.configurationmanager\\7.0.0\\system.configuration.configurationmanager.7.0.0.nupkg.sha512",

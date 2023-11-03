@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "JiJW7E74KXcjboBL+xqbDQpAj/Mr9yHrQ+T+xRWCMe+beTGCP9A7SfNqCe9mGc3csKTGt4ifSv8uErWV7ecL8g==",
+  "dgSpecHash": "BmYVecPEYCeVpMzKMVjiyrfvDhL39AuZeb7OZ8+Ejs3Dr1LGOAJCsfxRspdDhDylSlO99LrvhUsPySTs54L8dQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\tester\\source\\repos\\Encode_Decode_Testing_Automation\\Encode_Decode_Testing_Automation\\Encode_Decode_Testing_Automation.csproj",
+  "projectFilePath": "C:\\Users\\tester\\Desktop\\CpuAndGpuMetrics\\Encode_Decode_Testing_Automation\\Encode_Decode_Testing_Automation\\Encode_Decode_Testing_Automation.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\tester\\.nuget\\packages\\microsoft.win32.systemevents\\7.0.0\\microsoft.win32.systemevents.7.0.0.nupkg.sha512",
     "C:\\Users\\tester\\.nuget\\packages\\system.configuration.configurationmanager\\7.0.0\\system.configuration.configurationmanager.7.0.0.nupkg.sha512",

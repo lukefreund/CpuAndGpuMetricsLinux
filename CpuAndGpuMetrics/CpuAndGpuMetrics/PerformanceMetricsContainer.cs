@@ -84,6 +84,11 @@ namespace CpuAndGpuMetrics
             float cpuMetrics = CpuMetricRetriever.GetCpuUsage();
 
             GpuOverall = gpuMetrics[0];
+
+            // Khang added these 2 lines -> How can we get all the decode processes? The decode value that we return is only the average
+            Gpu3D = gpuMetrics[1];
+
+            VideoDecode0 = gpuMetrics[2];
         }
 
     }
