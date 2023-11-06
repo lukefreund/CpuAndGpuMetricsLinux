@@ -3,7 +3,7 @@ using static CpuAndGpuMetrics.CounterReader;
 
 namespace CpuAndGpuMetrics
 {
-    static public class CpuMetricRetriever
+    static internal class CpuMetricRetriever
     {
         static readonly int TIME = 2000;
 
@@ -22,7 +22,6 @@ namespace CpuAndGpuMetrics
             {
                 cpuCounter = new("Processor", "% Processor Time", "_Total");
                 cpuUsage = GetReading(cpuCounter, TIME);
-                Console.WriteLine($"Current CPU Usage (%) = {cpuUsage}%");
             }
             catch (Exception ex)
             {
