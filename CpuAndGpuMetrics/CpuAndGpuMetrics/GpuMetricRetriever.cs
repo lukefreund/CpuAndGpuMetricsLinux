@@ -4,16 +4,16 @@ using static CpuAndGpuMetrics.CounterReader;
 
 namespace CpuAndGpuMetrics
 {
-    static public class GpuMetricRetriever
+    static internal class GpuMetricRetriever
     {
-        static readonly int TIME = 25;
+        static readonly int TIME = 10;
 
 
         /// <summary>
         /// Prints GPU usage metrics.
         /// </summary>
         /// <returns>
-        /// An array containing, in this order, the total utilization, 3D utilization, Copy utilization, and 
+        /// An array containing, in this order, the 3D utilization, Copy utilization, and 
         /// Decode Utilization. If an error occurs, and empty array is returned.
         /// </returns>
         public static float[] GetGpuUsage()
@@ -65,17 +65,10 @@ namespace CpuAndGpuMetrics
                 // Calculate the sum of different metrics
                 float d3Utilization = d3Values.Sum();
                 // Khang: Perhaps write a function to place the decode values towards the end of the return array
-                float decodeUtilization = decodeValues.Sum() / 3;
+                float decodeUtilization = decodeValues.Sum(); // / 3;
                 float copyUtilization = copyValues.Sum();
-                float totalUtilization = new[] { d3Utilization, decodeUtilization, copyUtilization }.Max();
 
-                // Display the metrics
-                Console.WriteLine($"GPU Overall Utilization (%) = {totalUtilization}");
-                Console.WriteLine($"GPU 3D Utilization (%) = {d3Utilization}");
-                Console.WriteLine($"GPU Copy Utilization (%) = {copyUtilization}");
-                Console.WriteLine($"GPU Decode Utilization (%) = {decodeUtilization}");
-
-                return new float[] { totalUtilization, d3Utilization, copyUtilization, decodeUtilization, };
+                return new float[] { d3Utilization, copyUtilization, decodeUtilization, };
             }
             catch (Exception ex)
             {
