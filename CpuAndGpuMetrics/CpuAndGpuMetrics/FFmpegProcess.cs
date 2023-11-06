@@ -172,19 +172,15 @@ namespace CpuAndGpuMetrics
             {
                 //Console.WriteLine($"ffmpeg -hide_banner -v verbose -hwaccel {this.hardwareAccel.ToString()} -i {this.filename} -c:v {this.encoder.ToString()} -t {TIME} output.mp4 -y");
                 var cmd = $"ffmpeg -hide_banner -v verbose -hwaccel {this.hardwareAccel.ToString().ToLower()} -i {this.filename} -c:v {this.encoder.ToString()} -t {TIME} output.mp4 -y";
-                var workingDir = @"\..\..\..\TestSources";
+                var workingDir = @"\..\..\..\OfficialSources";
 
-                Process p = new Process
-                {
-                    StartInfo =
-                    {
-                        //
-                    }
-                };
+                Process p = new Process();
+                p.StartInfo.UseShellExecute = true;
                 p.StartInfo.WorkingDirectory = p.StartInfo.WorkingDirectory + workingDir;
                 p.StartInfo.Arguments =$"{cmd}";
-                var startInfo = p.StartInfo;
-                p.Start(startInfo);
+                p.StartInfo.FileName = "C:\\Users\\bsousou\\Downloads\\ffmpeg-6.0-full_build\\bin\\ffmpeg.exe";
+
+                Process.Start(p.StartInfo);
 
             }
         }
