@@ -1,6 +1,4 @@
 ﻿using CpuAndGpuMetrics;
-using System.Diagnostics;
-using System.IO;
 using OfficeOpenXml; //main namespace for EPPlus library (allows us to manipulate the excel file)
 using System.Xml.Schema;
 using static CpuAndGpuMetrics.FFmpegProcess;
@@ -11,31 +9,38 @@ using System.Runtime.CompilerServices;
 class Program
 {
     readonly static string TESTSOURCESPATH = @"..\..\..\OfficialSources";
-    readonly static string[] hardwareAccels = new[] { "none", "cuda", "qsv", "d3d11va", "vulkan" }; // vaapi not avail on windows yet
-    readonly static GpuType gpu = GpuType.Nvidia; // set based on GPU
 
     static void Main()
     {
+        // Set Sources path
         string[] fileNames = Directory.GetFiles(TESTSOURCESPATH);
+
+        // Set Gpu type (Placeholder) and type of hwaccels based on that gpu
+        // NEED TO FIND A WAY TO AUTO DETECT GPU / OR AT LEAST MANUALLY INPUT ; ADD CODE AT "GpuType.cs"
+        GpuType gpu = GpuType.Nvidia; 
+        HardwareAccelerator hardwareAccelerator = new(gpu);
+
+        // Instantiate a dictionary to (potentially) store all gathered data conttainers
+        Dictionary<Video, PerformanceMetricsContainer> videoPerformanceDict = new();
+
         for (int i = 0; i < fileNames.Length; i++)
         {
             fileNames[i] = Path.GetFileName(fileNames[i]);
         }
 
-        foreach (var hardwareAccel in hardwareAccels)
+        foreach (var hardwareAccel in hardwareAccelerator.HardwareAccels)
         {
-            HardwareAccelerator hardwareAccelerator = new HardwareAccelerator(hardwareAccel);
-
             foreach (var filename in fileNames)
             {
                 Video video = Video.FilenameToVideo(filename);
 
-                FFmpegProcess FFmpegCommand = FFmpegProcess.FilenameToFFmpegProcess(filename, gpu, hardwareAccel);
+                FFmpegProcess FFmpegCommand = FFmpegProcess.FilenameToFFmpegProcess(filename, video, gpu, hardwareAccel);
                 FFmpegCommand.StartProcess();
-                
-                PerformanceMetricsContainer container = new PerformanceMetricsContainer();
+
+                PerformanceMetricsContainer container = new();
 
                 container.PopulateData(gpu);
+                videoPerformanceDict.Add(video, container);
 
 
                 //Video Information
@@ -61,6 +66,8 @@ class Program
                 Console.WriteLine("Data successfully written to Excel.");
             }
 
+                // kill process or wait till finish?
+                // also how to get ffmpeg FPS
         }
     }
 

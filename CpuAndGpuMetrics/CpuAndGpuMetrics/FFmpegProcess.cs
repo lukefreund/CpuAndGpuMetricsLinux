@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Security.Cryptography;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -11,42 +13,19 @@ namespace CpuAndGpuMetrics
     public class FFmpegProcess
     {
 
-        readonly static int TIME = 60;
+        private readonly static int TIME = 60;
 
-        string filename;
+        private readonly string filename;
 
-        HardwareAccel hardwareAccel;
+        private readonly HardwareAccel hardwareAccel;
 
-        Encoder encoder;
+        private readonly Encoder encoder;
 
-        bool skip = false;
-
-        GpuType gpuType;
+        private readonly bool skip = false;
 
         //string hardwareAccelOutputFormat;
 
         //float hardwareAccelDevice = 0;
-
-        public enum HardwareAccel
-        {
-            None = 0, 
-            Cuda = 1, 
-            QSV = 2,
-            D3D11VA = 3,
-            Vulkan = 4,
-            Unknown = 5,
-            // vaapi
-        }
-
-        public enum Encoder
-        {
-            h264_nvenc = 0, //Nvidia
-            h264_qsv = 1, //Intel
-            hevc_nvenc = 2, //Nvidia
-            hevc_qsv = 3, //Intel
-            Unknown = 4,
-        }
-
 
         public FFmpegProcess(string filename, HardwareAccel hardwareAccel, Encoder encoder, bool skip)
         {
@@ -56,18 +35,17 @@ namespace CpuAndGpuMetrics
             this.skip = skip;
         }
 
-        public static FFmpegProcess FilenameToFFmpegProcess(string filename, GpuType gpuType, string hardwareAccel)
+        public static FFmpegProcess FilenameToFFmpegProcess(string filename, Video video, GpuType gpuType, string hardwareAccel)
         {
             if (string.IsNullOrEmpty(filename))
             {
-                throw new ArgumentNullException("filename");
+                throw new ArgumentNullException(nameof(filename) + " is Null or Empty!");
             }
 
-            string codec = filename.Split("_")[0];
-
-            HardwareAccel accel;
             Encoder encoder;
+            HardwareAccel accel;
             bool skip = false;
+            string codec = video.CodecExt.ToString();
             
             if (gpuType == GpuType.Nvidia)
             {
@@ -94,8 +72,7 @@ namespace CpuAndGpuMetrics
                 }
                 else if (hardwareAccel == "qsv")
                 {
-                    accel = HardwareAccel.QSV;
-                    skip = true;
+                    throw new ArgumentException("hwaccel and GPU type is incompatible!");
                 }
                 else if (hardwareAccel == "d3d11va")
                 {
@@ -103,7 +80,6 @@ namespace CpuAndGpuMetrics
                 }
                 else if (hardwareAccel == "vulkan")
                 {
-                    skip = true;
                     accel = HardwareAccel.Vulkan;
                 }
                 else
@@ -133,8 +109,7 @@ namespace CpuAndGpuMetrics
                 }
                 else if (hardwareAccel == "cuda")
                 {
-                    skip = true;
-                    accel = HardwareAccel.Cuda;
+                    throw new ArgumentException("hwaccel and GPU type is incompatible!");
                 }
                 else if (hardwareAccel == "qsv")
                 {
@@ -159,6 +134,13 @@ namespace CpuAndGpuMetrics
                 throw new ArgumentException("GPU type not specified.");
             }
 
+            // ADD CRITERIAS FOR VIDEOS' SPECS. THAT SHOULD BE SKIPPED HERE:
+            // h264 && yuv444 for both 8bit and 10bit
+            if (video.CodecExt == Video.Codec.H264 && video.ChromaExt == Video.Chroma.Subsampling_444)
+            {
+                skip = true;
+            }
+
             return new FFmpegProcess(filename, accel, encoder, skip);
         }
 
@@ -166,29 +148,28 @@ namespace CpuAndGpuMetrics
         {
             if (skip == true)
             {
-                Console.WriteLine("Video format is invalid");
+                Console.WriteLine("\n" + filename);
+                Console.WriteLine("This Video Format is Skipped");
             }
             else
             {
-                //Console.WriteLine($"ffmpeg -hide_banner -v verbose -hwaccel {this.hardwareAccel.ToString()} -i {this.filename} -c:v {this.encoder.ToString()} -t {TIME} output.mp4 -y");
-                var cmd = $"ffmpeg -hide_banner -v verbose -hwaccel {this.hardwareAccel.ToString().ToLower()} -i {this.filename} -c:v {this.encoder.ToString()} -t {TIME} output.mp4 -y";
-                var workingDir = @"\..\..\..\OfficialSources";
+                string cmd = (hardwareAccel == HardwareAccel.None)
+                    ? $"ffmpeg -hide_banner -v verbose -hwaccel {this.hardwareAccel.ToString().ToLower()} -i {this.filename} -c:v {this.encoder} -t {TIME} output.mp4 -y"
+                    : $"ffmpeg -hide_banner -v verbose -hwaccel {this.hardwareAccel.ToString().ToLower()} -i {this.filename} -t {TIME} output.mp4 -y";
+                string workingDir = @"\..\..\..\OfficialSources";
+                Console.WriteLine($"\n {cmd} \n");
 
-                Process p = new Process();
+                Process p = new();
                 p.StartInfo.UseShellExecute = true;
                 p.StartInfo.WorkingDirectory = p.StartInfo.WorkingDirectory + workingDir;
                 p.StartInfo.Arguments =$"{cmd}";
-                p.StartInfo.FileName = "C:\\Users\\bsousou\\Downloads\\ffmpeg-6.0-full_build\\bin\\ffmpeg.exe";
+                p.StartInfo.FileName = "C:\\MyFiles\\ffmpeg-master-latest-win64-gpl\\bin\\ffmpeg.exe";
 
                 Process.Start(p.StartInfo);
 
             }
-        }
-
-
-
-        
+        }   
     }
 
-   
+
 }
