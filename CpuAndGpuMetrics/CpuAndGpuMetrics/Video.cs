@@ -18,6 +18,32 @@ namespace CpuAndGpuMetrics
 
         private BitDepth bitDepth;
 
+        public Codec CodecExt 
+        {
+            get { return codec; }
+            set {  codec = value; }
+        }
+
+        public Chroma ChromaExt 
+        {
+            get { return chroma; } 
+            set {  chroma = value; } 
+        }
+
+        public Resolution ResolutionExt 
+        { 
+            get { return resolution; } 
+            set {  resolution = value; } 
+        }
+
+        public BitDepth BitDepthExt 
+        { 
+            get { return bitDepth; }
+            set {  bitDepth = value; }
+        }
+
+
+
         public Video(Codec codec, Chroma chroma, Resolution resolution, BitDepth bitDepth)
         {
             this.codec = codec;
@@ -28,69 +54,10 @@ namespace CpuAndGpuMetrics
 
         public static Video FilenameToVideo(string filename)
         {
-            //string[] videoDetails = filename.Split('_');
-
-            //if (videoDetails.Length < 1)
-            //{
-            //    throw new ArgumentException("Filename format is incorrect. Format: codec_chroma_resolution_bitcolor");
-            //}
-
             Codec codec;
             Chroma chroma;
             Resolution resolution;
             BitDepth bitDepth;
-
-            //if (videoDetails[0] == "H264" || videoDetails[0] == "h264" || videoDetails[0] == "libx264" || videoDetails[0] == "x264")
-            //{
-            //    codec = Codec.H264;
-            //}
-            //else if (videoDetails[0] == "H265" || videoDetails[0] == "h265" || videoDetails[0] == "hevc" || videoDetails[0] == "x265")
-            //{
-            //    codec = Codec.H265;
-            //}
-            //else
-            //{
-            //    codec = Codec.Unknown;
-            //}
-
-            //if (videoDetails[1] == "420")
-            //{
-            //    chroma = Chroma.Subsampling_420;
-            //}
-            //else if (videoDetails[1] == "444")
-            //{
-            //    chroma = Chroma.Subsampling_444;
-            //}
-            //else
-            //{
-            //    chroma = Chroma.Unknown;
-            //}
-
-            //if (videoDetails[2] == "4K" || videoDetails[2] == "4k")
-            //{
-            //    resolution = Resolution.K4;
-            //}
-            //else if (videoDetails[2] == "HD" || videoDetails[2] == "hd")
-            //{
-            //    resolution = Resolution.HD;
-            //}
-            //else
-            //{
-            //    resolution = Resolution.Unknown;
-            //}
-
-            //if (videoDetails.Contains<String>("8bit") || videoDetails.Contains<String>("b08"))
-            //{
-            //    bitDepth = BitDepth.Bit_8;
-            //}
-            //else if (videoDetails.Contains<String>("10bit") || videoDetails.Contains<String>("b10"))
-            //{
-            //    bitDepth = BitDepth.Bit_10;
-            //}
-            //else
-            //{
-            //    bitDepth = BitDepth.Unknown;
-            //}
 
             if (filename.Contains("H264") || filename.Contains("h264") || filename.Contains("libx264") || filename.Contains("x264") )
             {

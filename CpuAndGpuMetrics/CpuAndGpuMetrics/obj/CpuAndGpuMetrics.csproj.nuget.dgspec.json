@@ -1,26 +1,27 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\bsousou\\Documents\\GitHub\\CPUAndGPUMetrics\\CpuAndGpuMetrics\\CpuAndGpuMetrics\\CpuAndGpuMetrics.csproj": {}
+    "C:\\MyScript\\CpuAndGpuMetrics\\CpuAndGpuMetrics\\CpuAndGpuMetrics\\CpuAndGpuMetrics.csproj": {}
   },
   "projects": {
-    "C:\\Users\\bsousou\\Documents\\GitHub\\CPUAndGPUMetrics\\CpuAndGpuMetrics\\CpuAndGpuMetrics\\CpuAndGpuMetrics.csproj": {
+    "C:\\MyScript\\CpuAndGpuMetrics\\CpuAndGpuMetrics\\CpuAndGpuMetrics\\CpuAndGpuMetrics.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\bsousou\\Documents\\GitHub\\CPUAndGPUMetrics\\CpuAndGpuMetrics\\CpuAndGpuMetrics\\CpuAndGpuMetrics.csproj",
+        "projectUniqueName": "C:\\MyScript\\CpuAndGpuMetrics\\CpuAndGpuMetrics\\CpuAndGpuMetrics\\CpuAndGpuMetrics.csproj",
         "projectName": "CpuAndGpuMetrics",
-        "projectPath": "C:\\Users\\bsousou\\Documents\\GitHub\\CPUAndGPUMetrics\\CpuAndGpuMetrics\\CpuAndGpuMetrics\\CpuAndGpuMetrics.csproj",
-        "packagesPath": "C:\\Users\\bsousou\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\bsousou\\Documents\\GitHub\\CPUAndGPUMetrics\\CpuAndGpuMetrics\\CpuAndGpuMetrics\\obj\\",
+        "projectPath": "C:\\MyScript\\CpuAndGpuMetrics\\CpuAndGpuMetrics\\CpuAndGpuMetrics\\CpuAndGpuMetrics.csproj",
+        "packagesPath": "C:\\Users\\htran1\\.nuget\\packages\\",
+        "outputPath": "C:\\MyScript\\CpuAndGpuMetrics\\CpuAndGpuMetrics\\CpuAndGpuMetrics\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\bsousou\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\htran1\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net7.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -60,7 +61,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.403\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.400\\RuntimeIdentifierGraph.json"
         }
       }
     }
