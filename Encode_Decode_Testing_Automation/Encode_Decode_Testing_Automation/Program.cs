@@ -12,7 +12,7 @@ class Program
 
         // Set Gpu type (Placeholder) and type of hwaccels based on that gpu
         // NEED TO FIND A WAY TO AUTO DETECT GPU / OR AT LEAST MANUALLY INPUT ; ADD CODE AT "GpuType.cs"
-        GpuType gpu = GpuType.Nvidia; 
+        GpuType gpu = GpuType.Nvidia;
         HardwareAccelerator hardwareAccelerator = new(gpu);
 
         // Instantiate a dictionary to (potentially) store all gathered data conttainers
@@ -28,35 +28,24 @@ class Program
             foreach (var filename in fileNames)
             {
                 Video video = Video.FilenameToVideo(filename);
+                PerformanceMetricsContainer container = new();
 
                 FFmpegProcess FFmpegCommand = FFmpegProcess.FilenameToFFmpegProcess(filename, video, gpu, hardwareAccel);
-                FFmpegCommand.StartProcess();
-
-                PerformanceMetricsContainer container = new();
+                var P = FFmpegCommand.StartProcess();
 
                 container.PopulateData(gpu);
                 videoPerformanceDict.Add(video, container);
 
-                // kill process or wait till finish?
-                // also how to get ffmpeg FPS
-
+                //P?.WaitForExit();
+               
                 // Export to excel
                 string file_path = @"C:\MyScript\CpuAndGpuMetrics\test.xlsx"; //TODO: NEED TO PUT CORRECT PATH AND MAKE A FILE THERE
-
                 WriteToExcel(file_path, container.CpuUsage, container.GpuOverall);
-
-                Console.WriteLine("Data successfully written to Excel.");
             }
         }
 
 
 
-
-    }
-
-    private static string[] ChooseHwAccelsBasedGPU()
-    {
-        throw new NotImplementedException();
     }
 
     static void WriteToExcel(string file_path, float cpuMetrics, float gpuMetrics)
@@ -80,5 +69,7 @@ class Program
 
         //Writes the array to a file at the specified "path"
         File.WriteAllBytes(file_path, draft1);
+
+        Console.WriteLine("Data successfully written to Excel.");
     }
 }

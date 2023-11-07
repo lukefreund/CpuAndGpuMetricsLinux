@@ -19,11 +19,11 @@ namespace CpuAndGpuMetrics
             switch (Gpu)
             {
                 case GpuType.Nvidia:
-                    HardwareAccels = new[] { "none", "cuda", "d3d11va", "vulkan" };
+                    HardwareAccels = new[] { "cuda", "d3d11va", "vulkan", "none" };
                     break;
 
                 case GpuType.Intel:
-                    HardwareAccels = new[] { "none", "qsv", "d3d11va", "vulkan", "vaapi" };
+                    HardwareAccels = new[] { "qsv", "d3d11va", "vulkan", "vaapi", "none" };
                     break;
 
                 case null:
