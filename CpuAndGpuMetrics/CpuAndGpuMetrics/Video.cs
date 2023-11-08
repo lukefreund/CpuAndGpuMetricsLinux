@@ -102,7 +102,7 @@ namespace CpuAndGpuMetrics
             {
                 bitDepth = BitDepth.Bit_8;
             }
-            else if (filename.Contains("10bit") || filename.Contains("b10 "))
+            else if (filename.Contains("10bit") || filename.Contains("b10"))
             {  
                 bitDepth = BitDepth.Bit_10; 
             }

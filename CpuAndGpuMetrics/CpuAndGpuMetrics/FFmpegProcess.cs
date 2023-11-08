@@ -163,13 +163,11 @@ namespace CpuAndGpuMetrics
                 p.StartInfo.UseShellExecute = true;
                 p.StartInfo.WorkingDirectory = p.StartInfo.WorkingDirectory + workingDir;
                 p.StartInfo.Arguments =$"{cmd}";
-                p.StartInfo.FileName = "C:\\MyFiles\\ffmpeg-master-latest-win64-gpl\\bin\\ffmpeg.exe";
+                p.StartInfo.FileName = "C:\\Users\\bsousou\\Downloads\\ffmpeg-6.0-full_build\\bin\\ffmpeg.exe";
 
                 Process.Start(p.StartInfo);
 
             }
         }   
     }
-
-
 }
