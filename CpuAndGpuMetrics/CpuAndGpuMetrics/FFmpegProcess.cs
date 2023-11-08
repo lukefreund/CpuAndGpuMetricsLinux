@@ -164,13 +164,12 @@ namespace CpuAndGpuMetrics
                 Console.WriteLine($"\n {cmd} \n");
 
                 Process p = new();
+                string workingDir = TESTSOURCESPATH;
                 p.StartInfo.UseShellExecute = true;
                 p.StartInfo.WorkingDirectory = p.StartInfo.WorkingDirectory + workingDir;
                 p.StartInfo.Arguments =$"{cmd}";
                 p.StartInfo.FileName = "C:\\Users\\bsousou\\Downloads\\ffmpeg-6.0-full_build\\bin\\ffmpeg.exe";
-                string workingDir = TESTSOURCESPATH;
 
-               
                 p.Start();
 
                 Console.WriteLine($"\n{p.StandardOutput.ReadToEnd()}\n");
