@@ -10,6 +10,10 @@ namespace CpuAndGpuMetrics
 {
     public class Video
     {
+        //private GpuType gpuType;
+
+        //public OperatingSystem operatingSystem;
+
         private Codec codec;
 
         private Chroma chroma;
@@ -17,6 +21,12 @@ namespace CpuAndGpuMetrics
         private Resolution resolution;
 
         private BitDepth bitDepth;
+
+        //public GpuType gputypeExt 
+        //{
+        //    get { return gpuType; }
+        //    set { gpuType = value; }
+        //}
 
         public Codec CodecExt 
         {
@@ -102,7 +112,7 @@ namespace CpuAndGpuMetrics
             {
                 bitDepth = BitDepth.Bit_8;
             }
-            else if (filename.Contains("10bit") || filename.Contains("b10 "))
+            else if (filename.Contains("10bit") || filename.Contains("b10"))
             {  
                 bitDepth = BitDepth.Bit_10; 
             }
