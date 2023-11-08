@@ -12,5 +12,6 @@ namespace CpuAndGpuMetrics
     {
         Nvidia = 0,
         Intel = 1,
+        Unknown = 2,
     }
 }

@@ -165,10 +165,13 @@ namespace CpuAndGpuMetrics
 
                 Process p = new();
                 string workingDir = TESTSOURCESPATH;
-                p.StartInfo.UseShellExecute = true;
+
+                p.StartInfo.UseShellExecute = false;
+                p.StartInfo.CreateNoWindow = false;
+                p.StartInfo.RedirectStandardOutput = true;
                 p.StartInfo.WorkingDirectory = p.StartInfo.WorkingDirectory + workingDir;
-                p.StartInfo.Arguments =$"{cmd}";
-                p.StartInfo.FileName = "C:\\Users\\bsousou\\Downloads\\ffmpeg-6.0-full_build\\bin\\ffmpeg.exe";
+                p.StartInfo.FileName = "C:\\Users\\bsousou\\Downloads\\ffmpeg-6.0-full_build\\bin\\ffmpeg.exe"; // NEED TO AUTO DETECT / MANUAL INPUT THIS TOO
+                p.StartInfo.Arguments = $"{cmd}";
 
                 p.Start();
 
