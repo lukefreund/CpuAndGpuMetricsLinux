@@ -18,7 +18,7 @@ class Program
 
         // Set Gpu type (Placeholder) and type of hwaccels based on that gpu
         // NEED TO FIND A WAY TO AUTO DETECT GPU / OR AT LEAST MANUALLY INPUT ; ADD CODE AT "GpuType.cs"
-        GpuType gpu = GpuType.Nvidia; 
+        GpuType gpu = GpuType.Nvidia;
         HardwareAccelerator hardwareAccelerator = new(gpu);
 
         // Instantiate a dictionary to (potentially) store all gathered data conttainers
@@ -34,11 +34,10 @@ class Program
             foreach (var filename in fileNames)
             {
                 Video video = Video.FilenameToVideo(filename);
+                PerformanceMetricsContainer container = new();
 
                 FFmpegProcess FFmpegCommand = FFmpegProcess.FilenameToFFmpegProcess(filename, video, gpu, hardwareAccel);
-                FFmpegCommand.StartProcess();
-
-                PerformanceMetricsContainer container = new();
+                var P = FFmpegCommand.StartProcess();
 
                 container.PopulateData(gpu);
                 videoPerformanceDict.Add(video, container);
@@ -189,5 +188,7 @@ class Program
 
         //Writes the array to a file at the specified path
         File.WriteAllBytes(file_path, draft1);
+
+        Console.WriteLine("Data successfully written to Excel.");
     }
 }

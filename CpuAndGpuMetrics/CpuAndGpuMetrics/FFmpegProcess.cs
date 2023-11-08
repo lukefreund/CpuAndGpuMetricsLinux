@@ -12,6 +12,7 @@ namespace CpuAndGpuMetrics
 {
     public class FFmpegProcess
     {
+        readonly static string TESTSOURCESPATH = @"..\..\..\OfficialSources";
 
         private readonly static int TIME = 60;
 
@@ -26,6 +27,8 @@ namespace CpuAndGpuMetrics
         //string hardwareAccelOutputFormat;
 
         //float hardwareAccelDevice = 0;
+
+        public static event EventHandler<PerformanceMetricsContainer>? OnFFmpegStarted;
 
         public FFmpegProcess(string filename, HardwareAccel hardwareAccel, Encoder encoder, bool skip)
         {
@@ -144,19 +147,20 @@ namespace CpuAndGpuMetrics
             return new FFmpegProcess(filename, accel, encoder, skip);
         }
 
-        public void StartProcess()
+        public Process? StartProcess()
         {
             if (skip == true)
             {
                 Console.WriteLine("\n" + filename);
                 Console.WriteLine("This Video Format is Skipped");
+                return null;
             }
             else
             {
                 string cmd = (hardwareAccel == HardwareAccel.None)
-                    ? $"ffmpeg -hide_banner -v verbose -hwaccel {this.hardwareAccel.ToString().ToLower()} -i {this.filename} -c:v {this.encoder} -t {TIME} output.mp4 -y"
-                    : $"ffmpeg -hide_banner -v verbose -hwaccel {this.hardwareAccel.ToString().ToLower()} -i {this.filename} -t {TIME} output.mp4 -y";
-                string workingDir = @"\..\..\..\OfficialSources";
+                    ? $" -hide_banner -v verbose -hwaccel {this.hardwareAccel.ToString().ToLower()} -i {this.filename} -t {TIME} output.mp4 -y"
+                    : $" -hide_banner -v verbose -hwaccel {this.hardwareAccel.ToString().ToLower()} -i {this.filename} -c:v {this.encoder} -t {TIME} output.mp4 -y";
+
                 Console.WriteLine($"\n {cmd} \n");
 
                 Process p = new();
@@ -164,8 +168,13 @@ namespace CpuAndGpuMetrics
                 p.StartInfo.WorkingDirectory = p.StartInfo.WorkingDirectory + workingDir;
                 p.StartInfo.Arguments =$"{cmd}";
                 p.StartInfo.FileName = "C:\\Users\\bsousou\\Downloads\\ffmpeg-6.0-full_build\\bin\\ffmpeg.exe";
+                string workingDir = TESTSOURCESPATH;
 
-                Process.Start(p.StartInfo);
+               
+                p.Start();
+
+                Console.WriteLine($"\n{p.StandardOutput.ReadToEnd()}\n");
+                return p;
 
             }
         }   
