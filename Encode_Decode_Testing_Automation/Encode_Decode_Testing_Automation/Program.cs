@@ -11,6 +11,7 @@ using System.Collections;
 class Program
 {
     readonly static string TESTSOURCESPATH = @"..\..\..\OfficialSources";
+    readonly static string EXCELOUTPATH = @"C:\Users\bsousou\Documents\GitHub\CPUAndGPUMetrics\test1.xlsx";
 
     static void Main()
     {
@@ -20,43 +21,47 @@ class Program
         // Set Gpu type (Placeholder) and type of hwaccels based on that gpu
         // NEED TO FIND A WAY TO AUTO DETECT GPU / OR AT LEAST MANUALLY INPUT ; ADD CODE AT "GpuType.cs"
         GpuType gpu = GpuType.Nvidia;
-        HardwareAccelerator hardwareAccelerator = new(gpu);
+        Video video;
+        PerformanceMetricsContainer container;
+        HardwareAccelerator hwaccel;
 
-        // Instantiate a dictionary to (potentially) store all gathered data conttainers
-        KeyValuePair<Video, PerformanceMetricsContainer> videoPerformanceDict = new();
+        // Create a List of Tuples which store the Video info., it's performance and accel type
+        List<Tuple<Video, PerformanceMetricsContainer, HardwareAccelerator>> videoPerfData = new();
 
         for (int i = 0; i < fileNames.Length; i++)
         {
             fileNames[i] = Path.GetFileName(fileNames[i]);
         }
 
-        foreach (var hardwareAccel in hardwareAccelerator.HardwareAccels)
+        foreach (var hardwareAccel in HardwareAccelerator.HardwareAcceleratorChooser(gpu))
         {
             foreach (var filename in fileNames)
             {
-                Video video = Video.FilenameToVideo(filename);
-                PerformanceMetricsContainer container = new();
+                video = FilenameToVideo(filename);
+                container = new();
+                hwaccel = new(hardwareAccel, gpu);
 
-                FFmpegProcess FFmpegCommand = FFmpegProcess.FilenameToFFmpegProcess(filename, video, gpu, hardwareAccel);
+                FFmpegProcess FFmpegCommand = FilenameToFFmpegProcess(filename, video, gpu, hardwareAccel);
                 var P = FFmpegCommand.StartProcess();
 
                 container.PopulateData(gpu);
-                videoPerformanceDict.Add(video, container);
+                Tuple<Video, PerformanceMetricsContainer, HardwareAccelerator> tuple = new(video, container, hwaccel);
+                videoPerfData.Add(tuple);
 
-                P?.WaitForExit();
+                //P?.WaitForExit();
             }
-
+            // DEBUG
+            string file_path = EXCELOUTPATH; //TODO: NEED TO PUT CORRECT PATH AND MAKE A FILE THERE
+            DictToExcel(videoPerfData, file_path);
         }
-        // DEBUG
-        string file_path = @"C:\Users\bsousou\Documents\GitHub\CPUAndGPUMetrics\test1.xlsx"; //TODO: NEED TO PUT CORRECT PATH AND MAKE A FILE THERE
-        DictToExcel(videoPerformanceDict, file_path, hardwareAccelerator);
+
 
 
     }
 
     static void DictToExcel
-        (KeyValuePair<Video, PerformanceMetricsContainer> videoPerformanceDict, 
-        string file_path, HardwareAccelerator hardwareAccelerator)
+        (List<Tuple<Video, PerformanceMetricsContainer, HardwareAccelerator>> videoPerfData, 
+        string file_path)
     {
         ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
         using ExcelPackage CPUandGPU_Decode = new();
@@ -92,11 +97,16 @@ class Program
             }
         }
 
-        int row = 2; // 1st row is header; Data start from the 2nd
+        int testCounts = 1; // 1st row is header; Data start from the 2nd
 
-        foreach (KeyValuePair<Video, PerformanceMetricsContainer> entry in videoPerformanceDict)
+        foreach (Tuple<Video, PerformanceMetricsContainer, HardwareAccelerator> tupleEntry in videoPerfData)
         {
-            WriteToExcel(Raw_Data1, entry.Key, entry.Value, hardwareAccel, hardwareAccelerator.Gpu, row++);
+            Video video; PerformanceMetricsContainer container; HardwareAccelerator hwaccel;
+            video = tupleEntry.Item1;
+            container = tupleEntry.Item2;
+            hwaccel = tupleEntry.Item3;
+
+            WriteToExcel(Raw_Data1, video, container, hwaccel.HardwareAccel, hwaccel.Gpu, testCounts++);
         }
 
 
@@ -111,7 +121,7 @@ class Program
 
     static void WriteToExcel
         (ExcelWorksheet Raw_Data1, 
-        Video video, PerformanceMetricsContainer container, string hardwareAccel,  GpuType? gpu, int row)
+        Video video, PerformanceMetricsContainer container, string hardwareAccel,  GpuType? gpu, int testCounts)
     {
         //Can add if-else statements to change the color of the cells depending on chroma and color format
 
@@ -136,9 +146,9 @@ class Program
         string? gpuType = gpu?.ToString();
         string decodeMethod = (hardwareAccel == "none") ? "CPU Decoding" : "GPU Decoding";
         string hwaccel = hardwareAccel;
-        int newRow = row;
+        int newRow = testCounts + 1;
 
-        Raw_Data1.Cells[newRow, 1].Value = newRow;
+        Raw_Data1.Cells[newRow, 1].Value = testCounts;
         Raw_Data1.Cells[newRow, 2].Value = OS;
         Raw_Data1.Cells[newRow, 3].Value = gpuType;
         Raw_Data1.Cells[newRow, 4].Value = decodeMethod;

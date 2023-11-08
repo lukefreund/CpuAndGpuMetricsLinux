@@ -44,6 +44,10 @@ namespace CpuAndGpuMetrics
             {
                 throw new ArgumentNullException(nameof(filename) + " is Null or Empty!");
             }
+            if (filename.Contains("README"))
+            {
+                return new FFmpegProcess(filename, HardwareAccel.Unknown, Encoder.Unknown, true);
+            }
 
             Encoder encoder;
             HardwareAccel accel;
