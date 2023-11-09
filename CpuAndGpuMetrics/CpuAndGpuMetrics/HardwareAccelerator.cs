@@ -11,32 +11,22 @@ namespace CpuAndGpuMetrics
     {
         public GpuType? Gpu { get; set; }
 
-        public string HardwareAccel { get; set; }
+        public HardwareAccel HardwareAccel { get; set; }
 
-        public HardwareAccelerator(string hardwareAccel, GpuType gpu)
+        public HardwareAccelerator(HardwareAccel hardwareAccel, GpuType gpu)
         {
             this.HardwareAccel = hardwareAccel;
             this.Gpu = gpu;
         }
 
-        public static string[] HardwareAcceleratorChooser(GpuType? gpu)
+        public static HardwareAccel[] HardwareAcceleratorChooser(GpuType? gpu)
         {
-            string[] HardwareAccels;
-            switch (gpu)
+            HardwareAccel[] HardwareAccels = gpu switch
             {
-                case GpuType.Nvidia:
-                    HardwareAccels = new[] { "cuda", "d3d11va", "vulkan", "none" };
-                    break;
-
-                case GpuType.Intel:
-                    HardwareAccels = new[] { "qsv", "d3d11va", "vulkan", "vaapi", "none" };
-                    break;
-                case GpuType.Unknown:
-                case null:
-                default:
-                    HardwareAccels = new[] { "none" };
-                    break;
-            }
+                GpuType.Nvidia => new[] { HardwareAccel.Cuda, HardwareAccel.D3D11VA, HardwareAccel.Vulkan, HardwareAccel.None },
+                GpuType.Intel => new[] { HardwareAccel.QSV, HardwareAccel.D3D11VA, HardwareAccel.Vulkan, HardwareAccel.VAAPI, HardwareAccel.None },
+                _ => new[] { HardwareAccel.None },
+            };
             return HardwareAccels;
         }
     }
@@ -50,15 +40,6 @@ namespace CpuAndGpuMetrics
         Vulkan = 4,
         VAAPI = 5,
         Unknown = 6,
-    }
-
-    public enum Encoder
-    {
-        h264_nvenc = 0, //Nvidia
-        h264_qsv = 1, //Intel
-        hevc_nvenc = 2, //Nvidia
-        hevc_qsv = 3, //Intel
-        Unknown = 4,
     }
 
     public enum GpuType

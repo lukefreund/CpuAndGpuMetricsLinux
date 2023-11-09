@@ -12,33 +12,27 @@ namespace CpuAndGpuMetrics
 {
     public class FFmpegProcess
     {
-        readonly static string TESTSOURCESPATH = @"..\..\..\OfficialSources";
+        private readonly static string TESTSOURCESPATH = @"..\..\..\OfficialSources";
 
-        private readonly static int TIME = 60;
+        private readonly static string FFMPEGPATH = "C:\\MyFiles\\ffmpeg-master-latest-win64-gpl\\bin\\ffmpeg.exe";
 
         private readonly string filename;
 
         private readonly HardwareAccel hardwareAccel;
 
-        private readonly Encoder encoder;
-
         private readonly bool skip = false;
 
-        //string hardwareAccelOutputFormat;
-
-        //float hardwareAccelDevice = 0;
-
+        // WIP Events
         public static event EventHandler<PerformanceMetricsContainer>? OnFFmpegStarted;
 
-        public FFmpegProcess(string filename, HardwareAccel hardwareAccel, Encoder encoder, bool skip)
+        public FFmpegProcess(string filename, HardwareAccel hardwareAccel, bool skip)
         {
             this.hardwareAccel = hardwareAccel;
             this.filename = filename;
-            this.encoder = encoder;
             this.skip = skip;
         }
 
-        public static FFmpegProcess FilenameToFFmpegProcess(string filename, Video video, GpuType gpuType, string hardwareAccel)
+        public static FFmpegProcess FilenameToFFmpegProcess(string filename, Video video, GpuType gpuType, HardwareAccel hardwareAccel)
         {
             if (string.IsNullOrEmpty(filename))
             {
@@ -46,93 +40,55 @@ namespace CpuAndGpuMetrics
             }
             if (filename.Contains("README"))
             {
-                return new FFmpegProcess(filename, HardwareAccel.Unknown, Encoder.Unknown, true);
+                return new FFmpegProcess(filename, HardwareAccel.Unknown, true);
             }
 
-            Encoder encoder;
-            HardwareAccel accel;
+            HardwareAccel hwaccel;
             bool skip = false;
-            string codec = video.CodecExt.ToString();
             
             if (gpuType == GpuType.Nvidia)
             {
-                if (codec == "H264")
+                switch (hardwareAccel)
                 {
-                    encoder = Encoder.h264_nvenc;
-                }
-                else if (codec == "H265")
-                {
-                    encoder = Encoder.hevc_nvenc;
-                }
-                else
-                {
-                    encoder = Encoder.Unknown;
-                }
+                    case HardwareAccel.None:
+                    case HardwareAccel.Cuda:
+                    case HardwareAccel.D3D11VA:
+                    case HardwareAccel.Vulkan:
+                        hwaccel = hardwareAccel;
+                        break;
 
-                if (hardwareAccel == "none")
-                {
-                    accel = HardwareAccel.None;
-                }
-                else if (hardwareAccel == "cuda")
-                {
-                    accel = HardwareAccel.Cuda;
-                }
-                else if (hardwareAccel == "qsv")
-                {
-                    throw new ArgumentException("hwaccel and GPU type is incompatible!");
-                }
-                else if (hardwareAccel == "d3d11va")
-                {
-                    accel = HardwareAccel.D3D11VA;
-                }
-                else if (hardwareAccel == "vulkan")
-                {
-                    accel = HardwareAccel.Vulkan;
-                }
-                else
-                {
-                    accel = HardwareAccel.Unknown;
+                    case HardwareAccel.QSV:
+                        hwaccel = HardwareAccel.None;
+                        skip = true;
+                        Console.WriteLine("\nhwaccel and GPU type is incompatible!");
+                        break;
+
+                    default:
+                        hwaccel = HardwareAccel.Unknown;
+                        break;
                 }
 
             }
             else if (gpuType == GpuType.Intel)
             {
-                if (codec == "H264")
+                switch (hardwareAccel)
                 {
-                    encoder = Encoder.h264_qsv;
-                }
-                else if (codec == "H265")
-                {
-                    encoder = Encoder.hevc_qsv;
-                }
-                else
-                {
-                    encoder = Encoder.Unknown;
-                }
+                    case HardwareAccel.None:
+                    case HardwareAccel.QSV:
+                    case HardwareAccel.D3D11VA:
+                    case HardwareAccel.Vulkan:
+                        hwaccel = hardwareAccel;
+                        break;
 
-                if (hardwareAccel == "none")
-                {
-                    accel = HardwareAccel.None;
-                }
-                else if (hardwareAccel == "cuda")
-                {
-                    throw new ArgumentException("hwaccel and GPU type is incompatible!");
-                }
-                else if (hardwareAccel == "qsv")
-                {
-                    accel = HardwareAccel.QSV;
-                }
-                else if (hardwareAccel == "d3d11va")
-                {
-                    accel = HardwareAccel.D3D11VA;
-                }
-                else if (hardwareAccel == "vulkan")
-                {
-                    accel = HardwareAccel.Vulkan;
-                }
-                else
-                {
-                    accel = HardwareAccel.Unknown;
+                    case HardwareAccel.Cuda:
+                        hwaccel = HardwareAccel.None;
+                        skip = true;
+                        Console.WriteLine("\nhwaccel and GPU type is incompatible!");
+                        break;
+
+                    default:
+                        hwaccel = HardwareAccel.Unknown;
+                        break;
                 }
 
             }
@@ -148,7 +104,7 @@ namespace CpuAndGpuMetrics
                 skip = true;
             }
 
-            return new FFmpegProcess(filename, accel, encoder, skip);
+            return new FFmpegProcess(filename, hwaccel, skip);
         }
 
         public Process? StartProcess()
@@ -161,9 +117,42 @@ namespace CpuAndGpuMetrics
             }
             else
             {
-                string cmd = (hardwareAccel == HardwareAccel.None)
-                    ? $" -hide_banner -v verbose -hwaccel {this.hardwareAccel.ToString().ToLower()} -i {this.filename} -t {TIME} output.mp4 -y"
-                    : $" -hide_banner -v verbose -hwaccel {this.hardwareAccel.ToString().ToLower()} -i {this.filename} -c:v {this.encoder} -t {TIME} output.mp4 -y";
+                string cmd;
+                switch (hardwareAccel)
+                {
+                    // ffmpeg -hide_banner -v verbose -hwaccel cuda -hwaccel_device 0 -hwaccel_output_format cuda -i TestSources/i.mp4 -f null -
+                    case HardwareAccel.Cuda:
+                    // ffmpeg -hide_banner -v verbose -hwaccel qsv -hwaccel_device /dev/dri/card1 -hwaccel_output_format qsv -i TestSources/i.mp4 -f null -
+                    case HardwareAccel.QSV:
+                    // ffmpeg -hide_banner -v verbose -hwaccel vaapi -hwaccel_device /dev/dri/card0 -hwaccel_output_format vaapi -i TestSources/i.mp4 - f null -
+                    case HardwareAccel.VAAPI:
+                        cmd = 
+                            $" -hide_banner -v verbose -hwaccel {this.hardwareAccel.ToString().ToLower()} -hwaccel_device auto" +
+                            $" -hwaccel_output_format {this.hardwareAccel.ToString().ToLower()} -i {this.filename} -f null -";
+                        break;
+
+                    // ffmpeg -hide_banner -v verbose -hwaccel d3d11va -hwaccel_device 0 -hwaccel_output_format d3d11 -i TestSources/i.mp4 -f null -
+                    case HardwareAccel.D3D11VA:
+                        cmd =
+                            $" -hide_banner -v verbose -hwaccel {this.hardwareAccel.ToString().ToLower()} -hwaccel_device auto" +
+                            $" -hwaccel_output_format d3d11 -i {this.filename} -f null -";
+                        break;
+
+                    // ffmpeg -v verbose -hide_banner -init_hw_device "vulkan=vk:0" -hwaccel vulkan -hwaccel_output_format vulkan -i TestSources/h264/420/HD.mp4 -f null -
+                    case HardwareAccel.Vulkan:
+                        cmd =
+                            $" -hide_banner -v verbose -init_hw_device \"vulkan=vk:0\" " +
+                            $" -hwaccel {this.hardwareAccel.ToString().ToLower()}" +
+                            $" -hwaccel_output_format d3d11 -i {this.filename} -f null -";
+                        break;
+
+                    // ffmpeg -hide_banner -verbose -i TestSources/HD.mp4 -f null -
+                    case HardwareAccel.Unknown:
+                    case HardwareAccel.None:
+                    default:
+                        cmd = $" -hide_banner -v verbose -i {this.filename} -f null -";
+                        break;
+                }
 
                 Console.WriteLine($"\n {cmd} \n");
 
@@ -174,7 +163,7 @@ namespace CpuAndGpuMetrics
                 p.StartInfo.CreateNoWindow = false;
                 p.StartInfo.RedirectStandardOutput = true;
                 p.StartInfo.WorkingDirectory = p.StartInfo.WorkingDirectory + workingDir;
-                p.StartInfo.FileName = "C:\\Users\\bsousou\\Downloads\\ffmpeg-6.0-full_build\\bin\\ffmpeg.exe"; // NEED TO AUTO DETECT / MANUAL INPUT THIS TOO
+                p.StartInfo.FileName = FFMPEGPATH; // NEED TO AUTO DETECT / MANUAL INPUT THIS TOO
                 p.StartInfo.Arguments = $"{cmd}";
 
                 p.Start();

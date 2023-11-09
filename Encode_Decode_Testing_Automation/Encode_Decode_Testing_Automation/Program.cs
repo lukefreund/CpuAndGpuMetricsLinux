@@ -106,7 +106,7 @@ class Program
             container = tupleEntry.Item2;
             hwaccel = tupleEntry.Item3;
 
-            WriteToExcel(Raw_Data1, video, container, hwaccel.HardwareAccel, hwaccel.Gpu, testCounts++);
+            WriteToExcel(Raw_Data1, video, container, hwaccel.HardwareAccel.ToString(), hwaccel.Gpu, testCounts++);
         }
 
 
