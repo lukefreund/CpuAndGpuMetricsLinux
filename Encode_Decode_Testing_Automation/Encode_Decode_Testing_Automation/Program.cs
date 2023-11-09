@@ -99,8 +99,6 @@ class Program
             for (int i = 0; i < headers.Length; i++)
             {
                 worksheet.Cells[1, i + 1].Value = headers[i];
-                //Raw_Data1.Cells[1, i + 1].IsRichText = true;
-
 
                 //Centering the headers
                 worksheet.Cells[1, i + 1].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
@@ -111,6 +109,7 @@ class Program
 
             }
         }
+        worksheet.Cells[2, 1, 1, headers.Length].AutoFilter = true;
 
         int testCounts = 1; // 1st row is header; Data start from the 2nd
 
@@ -123,7 +122,6 @@ class Program
 
             WriteToExcel(worksheet, video, container, hwaccel.HardwareAccel, hwaccel.Gpu, testCounts++);
         }
-
 
         ////Converting entire ExcelPackage to a byte array (prep for writing data to excel)
         //byte[] draft1 = CPUandGPU_Decode.GetAsByteArray();
@@ -242,6 +240,5 @@ class Program
             worksheet.Cells[newRow, 7].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
             worksheet.Cells[newRow, 7].Style.Fill.BackgroundColor.SetColor(Color.Red);
         }
-
     }
 }
