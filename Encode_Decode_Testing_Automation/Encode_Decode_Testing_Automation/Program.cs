@@ -42,13 +42,30 @@ class Program
                 hwaccel = new(hardwareAccel, gpu);
 
                 FFmpegProcess FFmpegCommand = FilenameToFFmpegProcess(filename, video, gpu, hardwareAccel);
-                var P = FFmpegCommand.StartProcess();
+                var p = FFmpegCommand.StartProcess();
 
                 container.PopulateData(gpu);
                 Tuple<Video, PerformanceMetricsContainer, HardwareAccelerator> tuple = new(video, container, hwaccel);
                 videoPerfData.Add(tuple);
 
-                //P?.WaitForExit();
+                //p?.WaitForExit();
+
+                string fps = "NOT FOUND";
+                while ( p!=null && !p.StandardError.EndOfStream)
+                {
+                    string? line = p.StandardError.ReadLine();
+                    Console.WriteLine(line);
+                    if (line != null && line.ToLower().Contains("fps"))
+                    {
+                        int fpsIndex = line.ToLower().IndexOf("fps");
+
+                        string fpsString = line.ToLower()[(fpsIndex + 4)..];
+
+                        fps = fpsString[..fpsString.IndexOf(" ")].Trim();
+                    }
+                }
+
+                Console.WriteLine(fps);
             }
             // DEBUG
             string file_path = EXCELOUTPATH; //TODO: NEED TO PUT CORRECT PATH AND MAKE A FILE THERE

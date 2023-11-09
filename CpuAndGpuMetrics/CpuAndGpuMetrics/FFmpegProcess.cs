@@ -162,13 +162,13 @@ namespace CpuAndGpuMetrics
                 p.StartInfo.UseShellExecute = false;
                 p.StartInfo.CreateNoWindow = false;
                 p.StartInfo.RedirectStandardOutput = true;
+                p.StartInfo.RedirectStandardError = true;
                 p.StartInfo.WorkingDirectory = p.StartInfo.WorkingDirectory + workingDir;
                 p.StartInfo.FileName = FFMPEGPATH; // NEED TO AUTO DETECT / MANUAL INPUT THIS TOO
                 p.StartInfo.Arguments = $"{cmd}";
 
                 p.Start();
 
-                Console.WriteLine($"\n{p.StandardOutput.ReadToEnd()}\n");
                 return p;
 
             }
