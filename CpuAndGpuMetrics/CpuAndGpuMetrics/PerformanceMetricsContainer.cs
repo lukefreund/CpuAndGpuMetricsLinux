@@ -25,7 +25,7 @@ namespace CpuAndGpuMetrics
 
         private float cpuUsage;
 
-        // private float? encode;
+        private float? hwaccel;
 
         public PerformanceMetricsContainer() { }
 

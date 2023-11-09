@@ -6,11 +6,5 @@ using System.Threading.Tasks;
 
 namespace CpuAndGpuMetrics
 {
-    // ADD THE SCRIPT TO DETECT GPU HERE
 
-    public enum GpuType
-    {
-        Nvidia = 0,
-        Intel = 1,
-    }
 }
