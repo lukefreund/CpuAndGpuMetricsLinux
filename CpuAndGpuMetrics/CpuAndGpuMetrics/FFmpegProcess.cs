@@ -14,7 +14,7 @@ namespace CpuAndGpuMetrics
     {
         private readonly static string TESTSOURCESPATH = @"..\..\..\OfficialSources";
 
-        private readonly static string FFMPEGPATH = "C:\\Users\\bsousou\\Downloads\\ffmpeg-6.0-full_build\\bin\\ffmpeg.exe";
+        private readonly static string FFMPEGPATH = "C:\\Users\\tester\\Downloads\\ffmpeg-master-latest-win64-gpl\\ffmpeg-master-latest-win64-gpl\\bin\\ffmpeg.exe";
 
         private readonly string filename;
 
@@ -127,14 +127,14 @@ namespace CpuAndGpuMetrics
                     // ffmpeg -hide_banner -v verbose -hwaccel vaapi -hwaccel_device /dev/dri/card0 -hwaccel_output_format vaapi -i TestSources/i.mp4 - f null -
                     case HardwareAccel.VAAPI:
                         cmd = 
-                            $" -hide_banner -v verbose -hwaccel {this.hardwareAccel.ToString().ToLower()} -hwaccel_device auto" +
+                            $" -hide_banner -v verbose -hwaccel {this.hardwareAccel.ToString().ToLower()} -hwaccel_device 0" +
                             $" -hwaccel_output_format {this.hardwareAccel.ToString().ToLower()} -i {this.filename} -f null -";
                         break;
 
                     // ffmpeg -hide_banner -v verbose -hwaccel d3d11va -hwaccel_device 0 -hwaccel_output_format d3d11 -i TestSources/i.mp4 -f null -
                     case HardwareAccel.D3D11VA:
                         cmd =
-                            $" -hide_banner -v verbose -hwaccel {this.hardwareAccel.ToString().ToLower()} -hwaccel_device auto" +
+                            $" -hide_banner -v verbose -hwaccel {this.hardwareAccel.ToString().ToLower()} -hwaccel_device 0" +
                             $" -hwaccel_output_format d3d11 -i {this.filename} -f null -";
                         break;
 

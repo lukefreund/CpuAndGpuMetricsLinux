@@ -14,7 +14,7 @@ class Program
     readonly private static string TESTSOURCESPATH = @"..\..\..\OfficialSources";
 
     //SPECIFY PATH WHERE YOU WOULD LIKE THE EXCEL FILES TO BE DUMPED
-    readonly private static string EXCELDIRECTORY = @"C:\Users\bsousou\Documents\GitHub\CPUAndGPUMetrics\";
+    readonly private static string EXCELDIRECTORY = @"..\..\..\";
     private static int testno = 0;
 
     //Combining file name and path
@@ -55,6 +55,7 @@ class Program
                 if (p != null)
                 {
                     container.PopulateData(gpu);
+                    Console.WriteLine("Data Populated.");
                     Tuple<Video, PerformanceMetricsContainer, HardwareAccelerator> tuple = new(video, container, hwaccel);
                     videoPerfData.Add(tuple);
                 }
@@ -76,10 +77,10 @@ class Program
                     }
                 }
 
-                Console.WriteLine("FPS: " + fps);
-
                 if (fps != "NOT FOUND") container.FramesPerSecond = float.Parse(fps);
                 else container.FramesPerSecond = -1.0f;
+
+                container.DisplayValues();
             }
             // DEBUG
             DictToExcel(videoPerfData, filePath);
@@ -207,32 +208,32 @@ class Program
 
 
         //More formatting: Coloring the hwaccel, codec, and chroma for further organization
-        if (hwaccel == "cuda")
+        if (hwaccel == "Cuda")
         {
             worksheet.Cells[newRow, 5].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
             worksheet.Cells[newRow, 5].Style.Fill.BackgroundColor.SetColor(Color.LightSlateGray);
         }
-        else if (hwaccel == "d3d11va")
+        else if (hwaccel == "D3D11VA")
         {
             worksheet.Cells[newRow, 5].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
             worksheet.Cells[newRow, 5].Style.Fill.BackgroundColor.SetColor(Color.LightSteelBlue);
         }
-        else if (hwaccel == "vulkan")
+        else if (hwaccel == "Vulkan")
         {
             worksheet.Cells[newRow, 5].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
             worksheet.Cells[newRow, 5].Style.Fill.BackgroundColor.SetColor(Color.LightYellow);
         }
-        else if (hwaccel == "vaapi")
+        else if (hwaccel == "VAAPI")
         {
             worksheet.Cells[newRow, 5].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
             worksheet.Cells[newRow, 5].Style.Fill.BackgroundColor.SetColor(Color.LightSalmon);
         }
-        else if (hwaccel == "none")
+        else if (hwaccel == "None")
         {
             worksheet.Cells[newRow, 5].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
             worksheet.Cells[newRow, 5].Style.Fill.BackgroundColor.SetColor(Color.Yellow);
         }
-        else if (hwaccel == "qsv")
+        else if (hwaccel == "QSV")
         {
             worksheet.Cells[newRow, 5].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
             worksheet.Cells[newRow, 5].Style.Fill.BackgroundColor.SetColor(Color.LightSkyBlue);
