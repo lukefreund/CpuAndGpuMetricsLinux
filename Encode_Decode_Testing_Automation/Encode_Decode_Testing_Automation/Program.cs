@@ -11,15 +11,15 @@ using System.Drawing;
 
 class Program
 {
-    readonly static string TESTSOURCESPATH = @"..\..\..\OfficialSources";
+    readonly private static string TESTSOURCESPATH = @"..\..\..\OfficialSources";
 
     //SPECIFY PATH WHERE YOU WOULD LIKE THE EXCEL FILES TO BE DUMPED
-    readonly static string EXCELDIRECTORY = @"C:\Users\bsousou\Documents\GitHub\CPUAndGPUMetrics\";
-    static int testno = 0;
+    readonly private static string EXCELDIRECTORY = @"C:\Users\bsousou\Documents\GitHub\CPUAndGPUMetrics\";
+    private static int testno = 0;
 
     //Combining file name and path
-    static string fileName = $"AutomatedData_#{++testno}.xlsx";
-    static string filePath = Path.Combine(EXCELDIRECTORY, fileName);
+    private static string fileName = $"AutomatedData_#{++testno}.xlsx";
+    private static string filePath = Path.Combine(EXCELDIRECTORY, fileName);
 
     static void Main()
     {
@@ -50,18 +50,38 @@ class Program
                 hwaccel = new(hardwareAccel, gpu);
 
                 FFmpegProcess FFmpegCommand = FilenameToFFmpegProcess(filename, video, gpu, hardwareAccel);
-                var P = FFmpegCommand.StartProcess();
+                var p = FFmpegCommand.StartProcess();
 
-                container.PopulateData(gpu);
-                Tuple<Video, PerformanceMetricsContainer, HardwareAccelerator> tuple = new(video, container, hwaccel);
-                videoPerfData.Add(tuple);
+                if (p != null)
+                {
+                    container.PopulateData(gpu);
+                    Tuple<Video, PerformanceMetricsContainer, HardwareAccelerator> tuple = new(video, container, hwaccel);
+                    videoPerfData.Add(tuple);
+                }
 
-                //P?.WaitForExit();
+                //p?.WaitForExit();
+
+                string fps = "NOT FOUND";
+                while ( p!=null && !p.StandardError.EndOfStream)
+                {
+                    string? line = p.StandardError.ReadLine();
+                    Console.WriteLine(line);
+                    if (line != null && line.ToLower().Contains("fps"))
+                    {
+                        int fpsIndex = line.ToLower().IndexOf("fps");
+
+                        string fpsString = line.ToLower()[(fpsIndex + 4)..];
+
+                        if (fpsString.Contains('q')) fps = fpsString[..(fpsString.IndexOf("q") - 1)].Trim();
+                    }
+                }
+
+                Console.WriteLine("FPS: " + fps);
+
+                if (fps != "NOT FOUND") container.FramesPerSecond = float.Parse(fps);
+                else container.FramesPerSecond = -1.0f;
             }
             // DEBUG
-            //string file_path = EXCELDIRECTORY; //TODO: NEED TO PUT CORRECT PATH AND MAKE A FILE THERE
-            //DictToExcel(videoPerfData, file_path);
-
             DictToExcel(videoPerfData, filePath);
         }
     }
@@ -109,7 +129,8 @@ class Program
 
             }
         }
-        worksheet.Cells[2, 1, 1, headers.Length].AutoFilter = true;
+        //Adding filters to headers
+        worksheet.Cells[1, 1, 1, headers.Length].AutoFilter = true;
 
         int testCounts = 1; // 1st row is header; Data start from the 2nd
 
@@ -120,7 +141,7 @@ class Program
             container = tupleEntry.Item2;
             hwaccel = tupleEntry.Item3;
 
-            WriteToExcel(worksheet, video, container, hwaccel.HardwareAccel, hwaccel.Gpu, testCounts++);
+            WriteToExcel(worksheet, video, container, hwaccel.HardwareAccel.ToString(), hwaccel.Gpu, testCounts++);
         }
 
         ////Converting entire ExcelPackage to a byte array (prep for writing data to excel)
