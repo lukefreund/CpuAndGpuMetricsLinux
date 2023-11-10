@@ -14,7 +14,7 @@ namespace CpuAndGpuMetrics
     {
         private readonly static string TESTSOURCESPATH = @"..\..\..\OfficialSources";
 
-        private readonly static string FFMPEGPATH = "C:\\MyFiles\\ffmpeg-master-latest-win64-gpl\\bin\\ffmpeg.exe";
+        private readonly static string FFMPEGPATH = "C:\\Users\\bsousou\\Downloads\\ffmpeg-6.0-full_build\\bin\\ffmpeg.exe";
 
         private readonly string filename;
 

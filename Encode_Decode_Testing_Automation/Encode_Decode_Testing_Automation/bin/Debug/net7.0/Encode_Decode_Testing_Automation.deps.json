@@ -8,7 +8,7 @@
     ".NETCoreApp,Version=v7.0": {
       "Encode_Decode_Testing_Automation/1.0.0": {
         "dependencies": {
-          "EPPlus": "7.0.0",
+          "EPPlus": "7.0.1",
           "System.Diagnostics.PerformanceCounter": "7.0.0",
           "CpuAndGpuMetrics": "1.0.0.0"
         },
@@ -16,20 +16,20 @@
           "Encode_Decode_Testing_Automation.dll": {}
         }
       },
-      "EPPlus/7.0.0": {
+      "EPPlus/7.0.1": {
         "dependencies": {
           "EPPlus.Interfaces": "6.1.1",
           "EPPlus.System.Drawing": "6.1.1",
           "Microsoft.Extensions.Configuration.Json": "7.0.0",
           "Microsoft.IO.RecyclableMemoryStream": "2.3.2",
           "System.ComponentModel.Annotations": "5.0.0",
-          "System.Security.Cryptography.Pkcs": "7.0.2",
+          "System.Security.Cryptography.Pkcs": "7.0.3",
           "System.Text.Encoding.CodePages": "7.0.0"
         },
         "runtime": {
           "lib/net7.0/EPPlus.dll": {
-            "assemblyVersion": "7.0.0.3",
-            "fileVersion": "7.0.0.3"
+            "assemblyVersion": "7.0.1.0",
+            "fileVersion": "7.0.1.0"
           }
         }
       },
@@ -245,14 +245,14 @@
         }
       },
       "System.Formats.Asn1/7.0.0": {},
-      "System.Security.Cryptography.Pkcs/7.0.2": {
+      "System.Security.Cryptography.Pkcs/7.0.3": {
         "dependencies": {
           "System.Formats.Asn1": "7.0.0"
         },
         "runtime": {
           "lib/net7.0/System.Security.Cryptography.Pkcs.dll": {
             "assemblyVersion": "7.0.0.0",
-            "fileVersion": "7.0.723.27404"
+            "fileVersion": "7.0.823.31807"
           }
         },
         "runtimeTargets": {
@@ -260,7 +260,7 @@
             "rid": "win",
             "assetType": "runtime",
             "assemblyVersion": "7.0.0.0",
-            "fileVersion": "7.0.723.27404"
+            "fileVersion": "7.0.823.31807"
           }
         }
       },
@@ -333,12 +333,12 @@
       "serviceable": false,
       "sha512": ""
     },
-    "EPPlus/7.0.0": {
+    "EPPlus/7.0.1": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-fqDPDAB0v+sU1m0VxDy4jBKhH77BoiaGjglnzflUVoHDL3Bnf8Xf/V8/dm3uYhMwChExnqFXxYscslu46seZQQ==",
-      "path": "epplus/7.0.0",
-      "hashPath": "epplus.7.0.0.nupkg.sha512"
+      "sha512": "sha512-eNTOmxcexmUskNUb4PQNNNtsqP5LXfNYBMkVnze1G09KmGxXgVB7kd6Ogm3/6NZSZmRisMjsyUKa0rUoExhJGA==",
+      "path": "epplus/7.0.1",
+      "hashPath": "epplus.7.0.1.nupkg.sha512"
     },
     "EPPlus.Interfaces/6.1.1": {
       "type": "package",
@@ -466,12 +466,12 @@
       "path": "system.formats.asn1/7.0.0",
       "hashPath": "system.formats.asn1.7.0.0.nupkg.sha512"
     },
-    "System.Security.Cryptography.Pkcs/7.0.2": {
+    "System.Security.Cryptography.Pkcs/7.0.3": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-xhFNJOcQSWhpiVGLLBQYoxAltQSQVycMkwaX1z7I7oEdT9Wr0HzSM1yeAbfoHaERIYd5s6EpLSOLs2qMchSKlA==",
-      "path": "system.security.cryptography.pkcs/7.0.2",
-      "hashPath": "system.security.cryptography.pkcs.7.0.2.nupkg.sha512"
+      "sha512": "sha512-yhwEHH5Gzl/VoADrXtt5XC95OFoSjNSWLHNutE7GwdOgefZVRvEXRSooSpL8HHm3qmdd9epqzsWg28UJemt22w==",
+      "path": "system.security.cryptography.pkcs/7.0.3",
+      "hashPath": "system.security.cryptography.pkcs.7.0.3.nupkg.sha512"
     },
     "System.Security.Cryptography.ProtectedData/7.0.0": {
       "type": "package",

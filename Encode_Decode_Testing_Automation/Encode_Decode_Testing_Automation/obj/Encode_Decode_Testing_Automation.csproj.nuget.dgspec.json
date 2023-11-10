@@ -1,27 +1,26 @@
 {
   "format": 1,
   "restore": {
-    "C:\\MyScript\\CpuAndGpuMetrics\\Encode_Decode_Testing_Automation\\Encode_Decode_Testing_Automation\\Encode_Decode_Testing_Automation.csproj": {}
+    "C:\\Users\\bsousou\\Documents\\GitHub\\CPUAndGPUMetrics\\Encode_Decode_Testing_Automation\\Encode_Decode_Testing_Automation\\Encode_Decode_Testing_Automation.csproj": {}
   },
   "projects": {
-    "C:\\MyScript\\CpuAndGpuMetrics\\Encode_Decode_Testing_Automation\\Encode_Decode_Testing_Automation\\Encode_Decode_Testing_Automation.csproj": {
+    "C:\\Users\\bsousou\\Documents\\GitHub\\CPUAndGPUMetrics\\Encode_Decode_Testing_Automation\\Encode_Decode_Testing_Automation\\Encode_Decode_Testing_Automation.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\MyScript\\CpuAndGpuMetrics\\Encode_Decode_Testing_Automation\\Encode_Decode_Testing_Automation\\Encode_Decode_Testing_Automation.csproj",
+        "projectUniqueName": "C:\\Users\\bsousou\\Documents\\GitHub\\CPUAndGPUMetrics\\Encode_Decode_Testing_Automation\\Encode_Decode_Testing_Automation\\Encode_Decode_Testing_Automation.csproj",
         "projectName": "Encode_Decode_Testing_Automation",
-        "projectPath": "C:\\MyScript\\CpuAndGpuMetrics\\Encode_Decode_Testing_Automation\\Encode_Decode_Testing_Automation\\Encode_Decode_Testing_Automation.csproj",
-        "packagesPath": "C:\\Users\\htran1\\.nuget\\packages\\",
-        "outputPath": "C:\\MyScript\\CpuAndGpuMetrics\\Encode_Decode_Testing_Automation\\Encode_Decode_Testing_Automation\\obj\\",
+        "projectPath": "C:\\Users\\bsousou\\Documents\\GitHub\\CPUAndGPUMetrics\\Encode_Decode_Testing_Automation\\Encode_Decode_Testing_Automation\\Encode_Decode_Testing_Automation.csproj",
+        "packagesPath": "C:\\Users\\bsousou\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\bsousou\\Documents\\GitHub\\CPUAndGPUMetrics\\Encode_Decode_Testing_Automation\\Encode_Decode_Testing_Automation\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\htran1\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\bsousou\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net7.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -42,7 +41,7 @@
           "dependencies": {
             "EPPlus": {
               "target": "Package",
-              "version": "[7.0.0, )"
+              "version": "[7.0.1, )"
             },
             "System.Diagnostics.PerformanceCounter": {
               "target": "Package",
@@ -65,7 +64,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.400\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.403\\RuntimeIdentifierGraph.json"
         }
       }
     }

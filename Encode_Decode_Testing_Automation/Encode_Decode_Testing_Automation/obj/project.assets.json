@@ -2,7 +2,7 @@
   "version": 3,
   "targets": {
     "net7.0": {
-      "EPPlus/7.0.0": {
+      "EPPlus/7.0.1": {
         "type": "package",
         "dependencies": {
           "EPPlus.Interfaces": "6.1.1",
@@ -10,7 +10,7 @@
           "Microsoft.Extensions.Configuration.Json": "7.0.0",
           "Microsoft.IO.RecyclableMemoryStream": "2.3.2",
           "System.ComponentModel.Annotations": "5.0.0",
-          "System.Security.Cryptography.Pkcs": "7.0.2",
+          "System.Security.Cryptography.Pkcs": "7.0.3",
           "System.Text.Encoding.CodePages": "7.0.0"
         },
         "compile": {
@@ -364,7 +364,7 @@
           "buildTransitive/net6.0/_._": {}
         }
       },
-      "System.Security.Cryptography.Pkcs/7.0.2": {
+      "System.Security.Cryptography.Pkcs/7.0.3": {
         "type": "package",
         "dependencies": {
           "System.Formats.Asn1": "7.0.0"
@@ -518,15 +518,15 @@
     }
   },
   "libraries": {
-    "EPPlus/7.0.0": {
-      "sha512": "fqDPDAB0v+sU1m0VxDy4jBKhH77BoiaGjglnzflUVoHDL3Bnf8Xf/V8/dm3uYhMwChExnqFXxYscslu46seZQQ==",
+    "EPPlus/7.0.1": {
+      "sha512": "eNTOmxcexmUskNUb4PQNNNtsqP5LXfNYBMkVnze1G09KmGxXgVB7kd6Ogm3/6NZSZmRisMjsyUKa0rUoExhJGA==",
       "type": "package",
-      "path": "epplus/7.0.0",
+      "path": "epplus/7.0.1",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "EPPlusLogo.png",
-        "epplus.7.0.0.nupkg.sha512",
+        "epplus.7.0.1.nupkg.sha512",
         "epplus.nuspec",
         "lib/net35/EPPlus.dll",
         "lib/net35/EPPlus.xml",
@@ -1101,10 +1101,10 @@
         "useSharedDesignerContext.txt"
       ]
     },
-    "System.Security.Cryptography.Pkcs/7.0.2": {
-      "sha512": "xhFNJOcQSWhpiVGLLBQYoxAltQSQVycMkwaX1z7I7oEdT9Wr0HzSM1yeAbfoHaERIYd5s6EpLSOLs2qMchSKlA==",
+    "System.Security.Cryptography.Pkcs/7.0.3": {
+      "sha512": "yhwEHH5Gzl/VoADrXtt5XC95OFoSjNSWLHNutE7GwdOgefZVRvEXRSooSpL8HHm3qmdd9epqzsWg28UJemt22w==",
       "type": "package",
-      "path": "system.security.cryptography.pkcs/7.0.2",
+      "path": "system.security.cryptography.pkcs/7.0.3",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -1129,7 +1129,7 @@
         "runtimes/win/lib/net6.0/System.Security.Cryptography.Pkcs.xml",
         "runtimes/win/lib/net7.0/System.Security.Cryptography.Pkcs.dll",
         "runtimes/win/lib/net7.0/System.Security.Cryptography.Pkcs.xml",
-        "system.security.cryptography.pkcs.7.0.2.nupkg.sha512",
+        "system.security.cryptography.pkcs.7.0.3.nupkg.sha512",
         "system.security.cryptography.pkcs.nuspec",
         "useSharedDesignerContext.txt"
       ]
@@ -1363,31 +1363,30 @@
   },
   "projectFileDependencyGroups": {
     "net7.0": [
-      "EPPlus >= 7.0.0",
+      "EPPlus >= 7.0.1",
       "System.Diagnostics.PerformanceCounter >= 7.0.0"
     ]
   },
   "packageFolders": {
-    "C:\\Users\\htran1\\.nuget\\packages\\": {}
+    "C:\\Users\\bsousou\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\MyScript\\CpuAndGpuMetrics\\Encode_Decode_Testing_Automation\\Encode_Decode_Testing_Automation\\Encode_Decode_Testing_Automation.csproj",
+      "projectUniqueName": "C:\\Users\\bsousou\\Documents\\GitHub\\CPUAndGPUMetrics\\Encode_Decode_Testing_Automation\\Encode_Decode_Testing_Automation\\Encode_Decode_Testing_Automation.csproj",
       "projectName": "Encode_Decode_Testing_Automation",
-      "projectPath": "C:\\MyScript\\CpuAndGpuMetrics\\Encode_Decode_Testing_Automation\\Encode_Decode_Testing_Automation\\Encode_Decode_Testing_Automation.csproj",
-      "packagesPath": "C:\\Users\\htran1\\.nuget\\packages\\",
-      "outputPath": "C:\\MyScript\\CpuAndGpuMetrics\\Encode_Decode_Testing_Automation\\Encode_Decode_Testing_Automation\\obj\\",
+      "projectPath": "C:\\Users\\bsousou\\Documents\\GitHub\\CPUAndGPUMetrics\\Encode_Decode_Testing_Automation\\Encode_Decode_Testing_Automation\\Encode_Decode_Testing_Automation.csproj",
+      "packagesPath": "C:\\Users\\bsousou\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\bsousou\\Documents\\GitHub\\CPUAndGPUMetrics\\Encode_Decode_Testing_Automation\\Encode_Decode_Testing_Automation\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\htran1\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\bsousou\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net7.0"
       ],
       "sources": {
-        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -1408,7 +1407,7 @@
         "dependencies": {
           "EPPlus": {
             "target": "Package",
-            "version": "[7.0.0, )"
+            "version": "[7.0.1, )"
           },
           "System.Diagnostics.PerformanceCounter": {
             "target": "Package",
@@ -1431,7 +1430,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.400\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.403\\RuntimeIdentifierGraph.json"
       }
     }
   }
