@@ -3,9 +3,13 @@ using static CpuAndGpuMetrics.CounterReader;
 
 namespace CpuAndGpuMetrics
 {
+    /// <summary>
+    /// Static class to retrieve CPU usage metrics.
+    /// </summary>
     static internal class CpuMetricRetriever
     {
-        static readonly int TIME = 2000;
+        /// <summary>Time (in ms) before reading CPU usage.</summary>
+        static readonly int TIME = 100;
 
         /// <summary>
         /// Gets the current CPU usage and prints it to the console.

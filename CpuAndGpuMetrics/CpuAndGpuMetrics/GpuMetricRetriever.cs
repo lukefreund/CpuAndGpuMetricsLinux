@@ -4,13 +4,17 @@ using static CpuAndGpuMetrics.CounterReader;
 
 namespace CpuAndGpuMetrics
 {
+    /// <summary>
+    /// Static class to retrieve GPU metrics.
+    /// </summary>
     static internal class GpuMetricRetriever
     {
+        /// <summary>Time (in ms) before reading GPU usage metrics.</summary>
         static readonly int TIME = 10;
 
 
         /// <summary>
-        /// Prints GPU usage metrics.
+        /// Retrieves GPU usage metrics.
         /// </summary>
         /// <returns>
         /// An array containing, in this order, the 3D utilization, Copy utilization, and 
@@ -30,7 +34,7 @@ namespace CpuAndGpuMetrics
                     return new float[0];
                 }
 
-                float[] totalValues = new float[instanceNames.Length];
+                // float[] totalValues = new float[instanceNames.Length];
                 float[] decodeValues = new float[instanceNames.Length];
                 float[] d3Values = new float[instanceNames.Length];
                 float[] copyValues = new float[instanceNames.Length];
@@ -42,31 +46,35 @@ namespace CpuAndGpuMetrics
                     string instance = instanceNames[i];
                     PerformanceCounter counter = new("GPU Engine", "Utilization Percentage", instance);
 
-                    float value = GetReading(counter, TIME);
-
-                    totalValues[i] = value;
-
+                    float value;
+                    
                     if (instance.Contains("engtype_3D"))
                     {
+                        value = GetReading(counter, TIME);
                         d3Values[i] = value;
                     }
 
                     if (instance.Contains("engtype_VideoDecode"))
                     {
+                        value = GetReading(counter, TIME);
                         decodeValues[i] = value;
                     }
 
                     if (instance.Contains("engtype_Copy"))
                     {
+                        value = GetReading(counter, TIME);
                         copyValues[i] = value;
                     }
+
+                    counter.Dispose();
+                    
                 }
 
-                // Calculate the sum of different metrics
                 float d3Utilization = d3Values.Sum();
-                // Khang: Perhaps write a function to place the decode values towards the end of the return array
-                float decodeUtilization = decodeValues.Sum(); // / 3;
+                float decodeUtilization = decodeValues.Sum();
                 float copyUtilization = copyValues.Sum();
+                Console.WriteLine($"3d: {d3Utilization}, decode: {decodeUtilization}, copy: {copyUtilization}", 
+                    d3Utilization, decodeUtilization, copyUtilization);
 
                 return new float[] { d3Utilization, copyUtilization, decodeUtilization, };
             }
