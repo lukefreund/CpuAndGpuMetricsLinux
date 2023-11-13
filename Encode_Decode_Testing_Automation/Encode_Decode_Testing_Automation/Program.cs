@@ -9,29 +9,35 @@ using System.Runtime.CompilerServices;
 using System.Collections;
 using System.Drawing;
 
+/// <summary>
+/// Class for the main entry point of the program
+/// </summary>
 class Program
 {
+    /// <summary>
+    /// Setting the path
+    /// </summary>
     readonly private static string TESTSOURCESPATH = @"..\..\..\OfficialSources";
-
     //SPECIFY PATH WHERE YOU WOULD LIKE THE EXCEL FILES TO BE DUMPED
     readonly private static string EXCELDIRECTORY = @"..\..\..\";
-    private static int testno = 0;
+
+    // Set Gpu type (Placeholder) and type of hwaccels based on that gpu
+    // NEED TO FIND A WAY TO AUTO DETECT GPU / OR AT LEAST MANUALLY INPUT ; ADD CODE AT "GpuType.cs"
+    private static GpuType gpu = GpuType.Nvidia;
+
+    private static int testno = 1;
 
     //Combining file name and path
     private static string fileName = $"AutomatedData_#{++testno}.xlsx";
     private static string filePath = Path.Combine(EXCELDIRECTORY, fileName);
 
+    /// <summary>
+    /// Main entry point of the Automation program
+    /// </summary>
     static void Main()
     {
         // Set Sources path
         string[] fileNames = Directory.GetFiles(TESTSOURCESPATH);
-
-        // Set Gpu type (Placeholder) and type of hwaccels based on that gpu
-        // NEED TO FIND A WAY TO AUTO DETECT GPU / OR AT LEAST MANUALLY INPUT ; ADD CODE AT "GpuType.cs"
-        GpuType gpu = GpuType.Nvidia;
-        Video video;
-        PerformanceMetricsContainer container;
-        HardwareAccelerator hwaccel;
 
         // Create a List of Tuples which store the Video info., it's performance and accel type
         List<Tuple<Video, PerformanceMetricsContainer, HardwareAccelerator>> videoPerfData = new();
@@ -45,15 +51,16 @@ class Program
         {
             foreach (var filename in fileNames)
             {
-                video = FilenameToVideo(filename);
-                container = new();
-                hwaccel = new(hardwareAccel, gpu);
+                Video video = FilenameToVideo(filename);
+                PerformanceMetricsContainer container = new();
+                HardwareAccelerator hwaccel = new(hardwareAccel, gpu);
 
                 FFmpegProcess FFmpegCommand = FilenameToFFmpegProcess(filename, video, gpu, hardwareAccel);
                 var p = FFmpegCommand.StartProcess();
 
                 if (p != null)
                 {
+                    Thread.Sleep(1500); // variable 1-2 secs (experiment)
                     container.PopulateData(gpu);
                     Console.WriteLine("Data Populated.");
                     Tuple<Video, PerformanceMetricsContainer, HardwareAccelerator> tuple = new(video, container, hwaccel);
@@ -66,7 +73,7 @@ class Program
                 while ( p!=null && !p.StandardError.EndOfStream)
                 {
                     string? line = p.StandardError.ReadLine();
-                    Console.WriteLine(line);
+                    //Console.WriteLine(line);
                     if (line != null && line.ToLower().Contains("fps"))
                     {
                         int fpsIndex = line.ToLower().IndexOf("fps");
@@ -80,14 +87,24 @@ class Program
                 if (fps != "NOT FOUND") container.FramesPerSecond = float.Parse(fps);
                 else container.FramesPerSecond = -1.0f;
 
-                container.DisplayValues();
+                if (p != null && !p.HasExited)
+                {
+                    p.Kill();
+                }
+
+                //container.DisplayValues();
             }
             // DEBUG
-            DictToExcel(videoPerfData, filePath);
+            DataListToExcel(videoPerfData, filePath);
         }
     }
 
-    static void DictToExcel
+    /// <summary>
+    /// Receive a List of tuples data to convert them into an excel sheet
+    /// </summary>
+    /// <param name="videoPerfData"></param>
+    /// <param name="file_path"></param>
+    static void DataListToExcel
         (List<Tuple<Video, PerformanceMetricsContainer, HardwareAccelerator>> videoPerfData, 
         string file_path)
     {
@@ -158,6 +175,15 @@ class Program
         Console.WriteLine("Data successfully written to Excel.");
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="worksheet"></param>
+    /// <param name="video"></param>
+    /// <param name="container"></param>
+    /// <param name="hardwareAccel"></param>
+    /// <param name="gpu"></param>
+    /// <param name="testCounts"></param>
     static void WriteToExcel
         (ExcelWorksheet worksheet, 
         Video video, PerformanceMetricsContainer container, string hardwareAccel,  GpuType? gpu, int testCounts)

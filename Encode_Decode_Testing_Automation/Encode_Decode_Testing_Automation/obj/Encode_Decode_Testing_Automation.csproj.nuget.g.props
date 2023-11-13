@@ -13,4 +13,10 @@
     <SourceRoot Include="C:\Users\tester\.nuget\packages\" />
     <SourceRoot Include="C:\Program Files (x86)\Microsoft Visual Studio\Shared\NuGetPackages\" />
   </ItemGroup>
+  <ImportGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
+    <Import Project="$(NuGetPackageRoot)nservicebus.metrics.performancecounters\5.0.0\build\NServiceBus.Metrics.PerformanceCounters.props" Condition="Exists('$(NuGetPackageRoot)nservicebus.metrics.performancecounters\5.0.0\build\NServiceBus.Metrics.PerformanceCounters.props')" />
+  </ImportGroup>
+  <PropertyGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
+    <PkgNServiceBus Condition=" '$(PkgNServiceBus)' == '' ">C:\Users\tester\.nuget\packages\nservicebus\8.0.0</PkgNServiceBus>
+  </PropertyGroup>
 </Project>

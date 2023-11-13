@@ -8,52 +8,66 @@ using System.Threading.Tasks;
 
 namespace CpuAndGpuMetrics
 {
+    /// <summary>
+    /// Contains relevant information about a video file.
+    /// </summary>
     public class Video
     {
-        //private GpuType gpuType;
-
-        //public OperatingSystem operatingSystem;
-
+        /// <summary>The codec (H264, H265).</summary>
         private Codec codec;
 
+        /// <summary>The chroma subsampling of the video (420, 444).</summary>
         private Chroma chroma;
 
+        /// <summary>The resolution of the video (HD, UHD).</summary>
         private Resolution resolution;
 
+        /// <summary>The bitdepth of the video (8 bit, 10 bit).</summary>
         private BitDepth bitDepth;
 
-        //public GpuType gputypeExt 
-        //{
-        //    get { return gpuType; }
-        //    set { gpuType = value; }
-        //}
-
+        /// <summary>
+        /// Gets or sets the codec.
+        /// </summary>
         public Codec CodecExt 
         {
             get { return codec; }
             set {  codec = value; }
         }
 
+        /// <summary>
+        /// Gets or sets the chroma.
+        /// </summary>
         public Chroma ChromaExt 
         {
             get { return chroma; } 
             set {  chroma = value; } 
         }
 
+        /// <summary>
+        /// Gets or sets the resolution. 
+        /// </summary>
         public Resolution ResolutionExt 
         { 
             get { return resolution; } 
             set {  resolution = value; } 
         }
 
+        /// <summary>
+        /// Gets or sets the bit depth. 
+        /// </summary>
         public BitDepth BitDepthExt 
         { 
             get { return bitDepth; }
             set {  bitDepth = value; }
         }
 
-
-
+        /// <summary>
+        /// Instantiates a Video object.
+        /// </summary>
+        /// <param name="codec">The codec of the video.</param>
+        /// <param name="chroma">The chroma subsampling of the video.</param>
+        /// <param name="resolution">The resolution of the video.</param>
+        /// <param name="bitDepth">The bit depth of the video.</param>
         public Video(Codec codec, Chroma chroma, Resolution resolution, BitDepth bitDepth)
         {
             this.codec = codec;
@@ -62,6 +76,11 @@ namespace CpuAndGpuMetrics
             this.bitDepth = bitDepth;
         }
 
+        /// <summary>
+        /// Converts a filename into a Video object.
+        /// </summary>
+        /// <param name="filename">Filename of video following a naming convention.</param>
+        /// <returns>Video object.</returns>
         public static Video FilenameToVideo(string filename)
         {
             Codec codec;
@@ -124,32 +143,44 @@ namespace CpuAndGpuMetrics
             return new Video(codec, chroma, resolution, bitDepth);
         }
 
+        /// <summary>
+        /// Possible Codecs
+        /// </summary>
         public enum Codec
         {
-            H264 = 0,
-            H265 = 1,
-            Unknown = 2,
+            Unknown = 0,
+            H264 = 1,
+            H265 = 2,
         }
 
+        /// <summary>
+        /// Possible chroma subsamplings
+        /// </summary>
         public enum Chroma
         {
-            Subsampling_420 = 0,
-            Subsampling_444 = 1,
-            Unknown = 2,
+            Unknown = 0,
+            Subsampling_420 = 1,
+            Subsampling_444 = 2,
         }
 
+        /// <summary>
+        /// Possible bit depths
+        /// </summary>
         public enum BitDepth
         {
-            Bit_8 = 0,
-            Bit_10 = 1,
-            Unknown = 2,
+            Unknown = 0,
+            Bit_8 = 1,
+            Bit_10 = 2,
         }
 
+        /// <summary>
+        /// Possible resolutions.
+        /// </summary>
         public enum Resolution
         {
-            HD = 0,
-            UHD = 1,
-            Unknown = 2,
+            Unknown = 0,
+            HD = 1,
+            UHD = 2,
         }
 
     }

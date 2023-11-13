@@ -2,6 +2,9 @@
 
 namespace CpuAndGpuMetrics
 {
+    /// <summary>
+    /// Static class for reading performance metrics
+    /// </summary>
     static class CounterReader
     {
         /// <summary>
