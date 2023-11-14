@@ -30,9 +30,6 @@ namespace CpuAndGpuMetrics
         /// <summary>Boolean indicating of process should be skipped.</summary>
         private readonly bool skip = false;
 
-        // WIP Events
-        public static event EventHandler<PerformanceMetricsContainer>? OnFFmpegStarted;
-
         /// <summary>
         /// Initializes a FFmpegProcess object.
         /// </summary>
@@ -135,6 +132,7 @@ namespace CpuAndGpuMetrics
         /// <returns>The started process or null if the video format is skipped.</returns>
         public Process? StartProcess()
         {
+            // Check if this video should be skipped. If not then generate ffmnpeg cmd.
             if (skip == true || hardwareAccel == HardwareAccel.Unknown)
             {
                 Console.WriteLine("\n" + filename);
@@ -179,8 +177,11 @@ namespace CpuAndGpuMetrics
                         break;
                 }
 
+                // Debug cmd
                 Console.WriteLine($"\n {cmd} \n");
 
+                // Start a new process and set its parameters. Then returns the process to its caller
+                // FFMPEG output is cache on stderr not stdout
                 Process p = new();
                 string workingDir = TESTSOURCESPATH;
 
