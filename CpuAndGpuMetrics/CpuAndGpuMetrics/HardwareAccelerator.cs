@@ -18,9 +18,6 @@ namespace CpuAndGpuMetrics
         /// <summary>Gets or sets the hardware acceleration type.</summary>
         public HardwareAccel HardwareAccel { get; set; }
 
-        /// <summary>Container for video and performance metric pairings relating to the specific hardware accelerator.</summary>
-        private Dictionary<Video, PerformanceMetricsContainer> map;
-
         /// <summary>
         /// Initializes a HardwareAccelerator object.
         /// </summary>
@@ -48,15 +45,6 @@ namespace CpuAndGpuMetrics
             return HardwareAccels;
         }
 
-        public void AddPair(Video video, PerformanceMetricsContainer counter)
-        {
-            map.Add(video, counter);
-        }
-
-        public void ToExcel()
-        {
-            //
-        }
     }
 
     /// <summary>
