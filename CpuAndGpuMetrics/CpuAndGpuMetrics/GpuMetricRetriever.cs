@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics;
 using System.Reflection.Metadata;
-using static CpuAndGpuMetrics.CounterReader;
 
 namespace CpuAndGpuMetrics
 {
@@ -9,80 +8,63 @@ namespace CpuAndGpuMetrics
     /// </summary>
     static internal class GpuMetricRetriever
     {
-        /// <summary>Time (in ms) before reading GPU usage metrics.</summary>
-        static readonly int TIME = 10;
-
-
-        /// <summary>
-        /// Retrieves GPU usage metrics.
-        /// </summary>
-        /// <returns>
-        /// An array containing, in this order, the 3D utilization, Copy utilization, and 
-        /// Decode Utilization. If an error occurs, and empty array is returned.
-        /// </returns>
-        public static float[] GetGpuUsage()
+        public static async Task<float[]> GetGpuUsage(GpuType type)
         {
-            try
+            switch (type)
             {
-                // Initialize PerformanceCounters for GPU metrics
-                PerformanceCounterCategory category = new("GPU Engine");
-                string[] instanceNames = category.GetInstanceNames();
+                case GpuType.Nvidia:
+                {                    
+                    string command = "nvidia-smi --query-gpu=utilization.gpu,utilization.decoder,utilization.encoder --format=csv,noheader | awk '{print $1,$3,$5}'";
 
-                if (instanceNames == null || instanceNames.Length == 0)
-                {
-                    Console.WriteLine("No instances found for 'GPU Engine'.");
-                    return new float[0];
+                    string result = await ExecuteBashCommand(command);
+                    string[] resultTokens = result.Split(' ');
+
+                    float gpuUsage = float.Parse(resultTokens[0]);
+                    float gpuDecode = float.Parse(resultTokens[1]);
+                    float gpuEncode = float.Parse(resultTokens[2]);
+
+                    return new float[] {gpuUsage, gpuDecode, gpuEncode};
                 }
 
-                // float[] totalValues = new float[instanceNames.Length];
-                float[] decodeValues = new float[instanceNames.Length];
-                float[] d3Values = new float[instanceNames.Length];
-                float[] copyValues = new float[instanceNames.Length];
-
-                // Loop through all instances and populate values
-                for (int i = 0; i < instanceNames.Length; i++)
+                case GpuType.Intel:
                 {
+                    string password = "matrox";
+                    float timeout = 5.0f;
+                    string command = $"echo ${password} | sudo -S timeout ${timeout} intel_gpu_top -o - | tail -n +3 | awk '{{print $5,$11,$14}}'";
 
-                    string instance = instanceNames[i];
-                    PerformanceCounter counter = new("GPU Engine", "Utilization Percentage", instance);
+                    string result = await ExecuteBashCommand(command);
+                    string[] resultTokens = result.Split(' ');
 
-                    float value;
-                    
-                    if (instance.Contains("engtype_3D"))
-                    {
-                        value = GetReading(counter, TIME);
-                        d3Values[i] = value;
-                    }
+                    float gpu3D = float.Parse(resultTokens[0]);
+                    float gpuDecode0 = float.Parse(resultTokens[1]);
+                    float gpuDecode1 = float.Parse(resultTokens[2]);
+                    float gpuEncode = Math.Max(gpuDecode0, gpuDecode1);
 
-                    if (instance.Contains("engtype_VideoDecode"))
-                    {
-                        value = GetReading(counter, TIME);
-                        decodeValues[i] = value;
-                    }
-
-                    if (instance.Contains("engtype_Copy"))
-                    {
-                        value = GetReading(counter, TIME);
-                        copyValues[i] = value;
-                    }
-
-                    counter.Dispose();
-                    
+                    return new float[] {gpu3D, gpuDecode0, gpuDecode1, gpuEncode};
                 }
 
-                float d3Utilization = d3Values.Sum();
-                float decodeUtilization = decodeValues.Sum();
-                float copyUtilization = copyValues.Sum();
-                Console.WriteLine($"3d: {d3Utilization}, decode: {decodeUtilization}, copy: {copyUtilization}", 
-                    d3Utilization, decodeUtilization, copyUtilization);
-
-                return new float[] { d3Utilization, copyUtilization, decodeUtilization, };
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"An error occurred: {ex.Message}");
-                return new float[0];
+                default:
+                    return new float[] {-1, -1, -1};
             }
         }
-    }
+
+        static async Task<string> ExecuteBashCommand(string command)
+        {
+            using (Process process = new Process())
+            {
+                process.StartInfo.FileName = "/bin/bash";
+                process.StartInfo.Arguments = $"-c \"{command}\"";
+                process.StartInfo.RedirectStandardOutput = true;
+                process.StartInfo.UseShellExecute = false;
+                process.StartInfo.CreateNoWindow = true;
+
+                process.Start();
+                string result = await process.StandardOutput.ReadToEndAsync();
+                process.WaitForExit();
+
+                return result.Trim();
+            }
+        }
+        
+    }    
 }

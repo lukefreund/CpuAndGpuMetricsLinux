@@ -13,20 +13,24 @@ namespace CpuAndGpuMetrics
     public class HardwareAccelerator
     {
         /// <summary>Gets or sets the GPU type.</summary>
-        public GpuType? Gpu { get; set; }
+        public GpuType Gpu { get; set; }
 
         /// <summary>Gets or sets the hardware acceleration type.</summary>
         public HardwareAccel HardwareAccel { get; set; }
+
+        /// <summary>Gets or sets the boolean to use hw acceleration or not.</summary>
+        public bool IsHardwareAccel { get; set; }
 
         /// <summary>
         /// Initializes a HardwareAccelerator object.
         /// </summary>
         /// <param name="hardwareAccel"></param>
         /// <param name="gpu"></param>
-        public HardwareAccelerator(HardwareAccel hardwareAccel, GpuType gpu)
+        public HardwareAccelerator(HardwareAccel hardwareAccel, GpuType gpu, bool isHardwareAccel)
         {
             this.HardwareAccel = hardwareAccel;
             this.Gpu = gpu;
+            this.IsHardwareAccel = isHardwareAccel;
         }
 
         /// <summary>

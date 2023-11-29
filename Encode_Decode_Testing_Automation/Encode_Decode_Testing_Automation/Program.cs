@@ -1,4 +1,4 @@
-﻿using CpuAndGpuMetrics;
+﻿﻿using CpuAndGpuMetrics;
 using OfficeOpenXml;
 //main namespace for EPPlus library (allows us to manipulate the excel file)
 using System.Xml.Schema;
@@ -17,9 +17,9 @@ class Program
     /// <summary>
     /// Setting the path
     /// </summary>
-    readonly private static string TESTSOURCESPATH = @"..\..\..\OfficialSources";
+    readonly private static string TESTSOURCESPATH = @"OfficialSources";
     //SPECIFY PATH WHERE YOU WOULD LIKE THE EXCEL FILES TO BE DUMPED
-    readonly private static string EXCELDIRECTORY = @"..\..\..\";
+    readonly private static string EXCELDIRECTORY = @"./";
 
     // Set Gpu type (Placeholder) and type of hwaccels based on that gpu
     // NEED TO FIND A WAY TO AUTO DETECT GPU / OR AT LEAST MANUALLY INPUT ; ADD CODE AT "GpuType.cs"
@@ -28,14 +28,9 @@ class Program
     private static int testno = 1;
 
     //Combining file name and path
-    private static string fileName = $"AutomatedData_#{++testno}.xlsx";
-    private static string filePath = Path.Combine(EXCELDIRECTORY, fileName);
+    private static string fileName = $"AutomatedData_#List of configurations. Add new configurations or edit existing ones by using IntelliSense.
 
-    /// <summary>
-    /// Main entry point of the Automation program
-    /// </summary>
-    static void Main()
-    {
+
         // Set Sources path
         string[] fileNames = Directory.GetFiles(TESTSOURCESPATH);
 
@@ -47,28 +42,33 @@ class Program
             fileNames[i] = Path.GetFileName(fileNames[i]);
         }
 
+        // Loop through all sources files with all the hardware accelerator
         foreach (var hardwareAccel in HardwareAccelerator.HardwareAcceleratorChooser(gpu))
         {
             foreach (var filename in fileNames)
             {
                 Video video = FilenameToVideo(filename);
                 PerformanceMetricsContainer container = new();
-                HardwareAccelerator hwaccel = new(hardwareAccel, gpu);
+                HardwareAccelerator hwaccel = new(hardwareAccel, gpu, true);
 
-                FFmpegProcess FFmpegCommand = FilenameToFFmpegProcess(filename, video, gpu, hardwareAccel);
-                var p = FFmpegCommand.StartProcess();
+                FFmpegProcess ffmpegProcess = FilenameToFFmpegProcess(filename, video, hwaccel);
+                
+                // Start the ffmpeg process
+                var p = ffmpegProcess.StartProcess(hwaccel.IsHardwareAccel);
 
+                // Start data collection
                 if (p != null)
                 {
                     Thread.Sleep(1500); // variable 1-2 secs (experiment)
+
                     container.PopulateData(gpu);
                     Console.WriteLine("Data Populated.");
+
                     Tuple<Video, PerformanceMetricsContainer, HardwareAccelerator> tuple = new(video, container, hwaccel);
                     videoPerfData.Add(tuple);
                 }
 
-                //p?.WaitForExit();
-
+                // Start gathering fps value using process stderr
                 string fps = "NOT FOUND";
                 while ( p!=null && !p.StandardError.EndOfStream)
                 {
@@ -83,19 +83,21 @@ class Program
                         if (fpsString.Contains('q')) fps = fpsString[..(fpsString.IndexOf("q") - 1)].Trim();
                     }
                 }
-
                 if (fps != "NOT FOUND") container.FramesPerSecond = float.Parse(fps);
                 else container.FramesPerSecond = -1.0f;
 
+                // End process if not already ended
                 if (p != null && !p.HasExited)
                 {
                     p.Kill();
                 }
 
-                //container.DisplayValues();
+                // DEBUG
+                container.DisplayValues();
+                // Write to Excel
+                DataListToExcel(videoPerfData, filePath);
             }
-            // DEBUG
-            DataListToExcel(videoPerfData, filePath);
+
         }
     }
 
